@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Roslyn.zip" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Roslyn.zip" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Build" Version="16.10.0" ExcludeAssets="runtime" />
+		<PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\EnchCoreApi.Common\EnchCoreApi.Common.csproj" />
+	</ItemGroup>
+
+</Project> 

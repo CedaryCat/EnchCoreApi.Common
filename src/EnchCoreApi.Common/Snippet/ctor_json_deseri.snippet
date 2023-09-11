@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>ctor_json_deseri</Title>
+			<Shortcut>ctor_json_deseri</Shortcut>
+			<Description>仅供给json deseri使用的构造函数的代码片段（忽视null检查）</Description>
+			<Author>Melvin</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal Editable="false">
+					<ID>classname</ID>
+					<ToolTip>类名</ToolTip>
+					<Function>ClassName()</Function>
+					<Default>ClassNamePlaceholder</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp">
+				<![CDATA[
+	/// <summary>
+    /// called only in json deseri
+	/// </summary>
+    [Obsolete("called only in json deseri")]
+#nullable disable
+	public $classname$ ()
+	{
+		$end$
+	}
+#nullable restore]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

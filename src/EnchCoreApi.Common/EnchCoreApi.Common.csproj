@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	  <LangVersion>11</LangVersion>
+	  <TieredPGO>true</TieredPGO>
+	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	  <Configurations>Debug;Release;ForTerrariaPlugin_Debug;ForTerrariaPlugin_Release</Configurations>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<ForTerrariaPlugin>false</ForTerrariaPlugin>
+	</PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;8632;8618</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;8632;8618</NoWarn>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="EnchCoreApi.TrProtocol" Version="1.0.1" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.11" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="System.CodeDom" Version="6.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+		<PackageReference Include="System.Security.Permissions" Version="6.0.0" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='ForTerrariaPlugin_Debug|AnyCPU'">
+		<PackageReference Include="OTAPI.Upcoming" Version="3.1.20" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='ForTerrariaPlugin_Release|AnyCPU'">
+		<PackageReference Include="OTAPI.Upcoming" Version="3.1.20" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="HttpServer">
+			<HintPath>..\prebuilts\HttpServer.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="prebuilts\HttpServer.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(Platform)'=='ForTerrariaPlugin_Debug|AnyCPU'">
+		<Exec Command="COPY $(TargetPath) C:\Users\25034\Desktop\1.4.4.9\TEST\bin&#xD;&#xA;COPY $(TargetDir)$(TargetName).deps.json C:\Users\25034\Desktop\1.4.4.9\TEST\ServerPlugins&#xD;&#xA;COPY $(TargetDir)$(TargetName).pdb C:\Users\25034\Desktop\1.4.4.9\TEST\bin" />
+	</Target>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(Platform)'=='ForTerrariaPlugin_Release|AnyCPU'">
+		<Exec Command="COPY $(TargetPath) C:\Users\25034\Desktop\1.4.4.9\TEST\bin&#xD;&#xA;COPY $(TargetDir)$(TargetName).deps.json C:\Users\25034\Desktop\1.4.4.9\TEST\ServerPlugins&#xD;&#xA;COPY $(TargetDir)$(TargetName).pdb C:\Users\25034\Desktop\1.4.4.9\TEST\bin" />
+	</Target>
+
+</Project>
