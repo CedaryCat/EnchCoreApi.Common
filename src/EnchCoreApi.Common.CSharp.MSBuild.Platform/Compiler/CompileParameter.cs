@@ -1,6 +1,7 @@
 ﻿using EnchCoreApi.Common.CSharp.MSBuild;
 using EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler;
 using EnchCoreApi.Common.Dynamic;
+using Terraria;
 
 namespace EnchCoreApi.Common.Compiler {
     public class CompileParameter : SerializableData {
