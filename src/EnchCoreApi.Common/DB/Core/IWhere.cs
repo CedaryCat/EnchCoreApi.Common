@@ -88,14 +88,17 @@
         #endregion
 
         /// <summary>
-        /// Serialize the 'where statement' and it is not including 'WHERE', if this is a Empty 'where statement' it will return string.empty
+        /// GetPlainStatement the 'where statement' and it is not including 'WHERE', if this is a Empty 'where statement' it will return string.empty
         /// </summary>
         /// <returns></returns>
-        string SerializeContent();
+        string GetPlainStatementContent();
         /// <summary>
-        /// Serialize the full 'where statement' and it is including 'WHERE', if this is a Empty 'where statement' it will return string.empty
+        /// GetPlainStatement the full 'where statement' and it is including 'WHERE', if this is a Empty 'where statement' it will return string.empty
         /// </summary>
         /// <returns></returns>
-        string SerializeFullStatement();
+        string GetPlainStatement();
+
+        string GetStatementContent(ref ICollection<object?> paramCollector);
+        string GetStatement(ref ICollection<object?> paramCollector);
     }
 }

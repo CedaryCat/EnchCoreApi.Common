@@ -33,12 +33,15 @@ namespace EnchCoreApi.Common.DB.Core
         public RowType Parse(bool dispose = true) {
             var result = func();
             foreach (var column in Table) {
-                column.Setter(result, (new DBValue(QueryReader.Reader, column, QueryReader.FieldAccessor, column.RealType)).DeserializeValueObj());
+                column.Setter(result, (new DBValue(QueryReader.Reader, column, QueryReader.FieldAccessor, column.RealType)).GetValue());
             }
             if (dispose && CanDispose)
                 Dispose();
             return result;
         }
+        /// <summary>
+        /// It should't be disposed in enumerating.
+        /// </summary>
         private readonly bool CanDispose;
     }
 }

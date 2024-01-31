@@ -6,7 +6,7 @@ namespace EnchCoreApi.Common.DB.DBVistor
     {
         public T Get<T>(IDataReader reader, int column)
         {
-            return (this as IDBFieldGetter<T>).Get(reader, column);
+            return ((IDBFieldGetter<T>)this).Get(reader, column);
         }
 
         string ITextStorgeFieldAccessor<DateTime>.SerializeTextContent(DateTime from)

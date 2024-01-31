@@ -64,7 +64,7 @@ namespace EnchCoreApi.Common.DB.DBVistor
         public T Get<T>(Column column)
         {
             if (Reader == null) throw new ObjectDisposedException(nameof(Reader));
-            return new DBValue<T>(column, FieldAccessor, Reader).Deserialize();
+            return new DBValue<T>(column, FieldAccessor, Reader).GetTypedValue();
         }
     }
 }

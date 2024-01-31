@@ -1,5 +1,6 @@
 ﻿namespace EnchCoreApi.Common.DB.DBConditions {
     public interface IConditionElement {
-        string SerializeToText();
+        string GetPlainStatement();
+        string GetStatement(ref ICollection<object?> statementParams);
     }
 }

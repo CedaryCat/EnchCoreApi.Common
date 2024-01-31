@@ -8,8 +8,15 @@ namespace EnchCoreApi.Common.DB.DBConditions {
             Column = column;
             Value = value;
         }
-        public virtual string SerializeToText() {
-            return $"{Value[0].Column.Name} IN ({string.Join(",", Value.Select(v => v.Serialize()))})";
+        public virtual string GetPlainStatement() {
+            return $"{Value[0].Column.Name} IN ({string.Join(",", Value.Select(v => v.GetStatementPlainParam()))})";
+        }
+        public string GetStatement(ref ICollection<object?> paramCollector) {
+            int start = paramCollector.Count + 1;
+            foreach (var p in Value.Select(v => v.GetStatementParam())) {
+                paramCollector.Add(p);
+            }
+            return $"{Value[0].Column.Name} IN ({string.Join(",", Enumerable.Range(start, Value.Length).Select(i => $"@p{i}"))})";
         }
     }
 }

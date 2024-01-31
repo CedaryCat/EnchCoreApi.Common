@@ -341,10 +341,21 @@ namespace EnchCoreApi.Common.DB.Core {
         }
         #endregion
 
-        public virtual string SerializeContent() {
+        public virtual string GetPlainStatementContent() {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < Leaf.Count; i++) {
-                stringBuilder.Append(Leaf[i].SerializeToText());
+                stringBuilder.Append(Leaf[i].GetPlainStatement());
+                if (i != Leaf.Count - 1) {
+                    stringBuilder.Append(" and ");
+                }
+            }
+            return stringBuilder.ToString();
+        }
+
+        public virtual string GetStatementContent(ref ICollection<object?> paramCollector) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < Leaf.Count; i++) {
+                stringBuilder.Append(Leaf[i].GetStatement(ref paramCollector));
                 if (i != Leaf.Count - 1) {
                     stringBuilder.Append(" and ");
                 }

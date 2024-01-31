@@ -2,7 +2,7 @@
 {
     public interface ITextStorgeFieldAccessor<T>
     {
-        string SerializeTextContent(T from);
+        string SerializeTextContent(T? from);
         T DeserializeFromTextContent(string text);
     }
 }
