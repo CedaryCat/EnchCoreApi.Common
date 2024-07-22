@@ -6,8 +6,8 @@ using System.Data;
 namespace EnchCoreApi.Common.DB.Core
 {
     public class DBValue<T> : Value {
-        private IDBFieldAccessor access;
-        private T value;
+        private readonly IDBFieldAccessor access;
+        private readonly T? value;
         public override Column Column { get; protected set; }
         public DBValue(Column column, IDBFieldAccessor access, T value) {
             this.value = value;
@@ -19,7 +19,6 @@ namespace EnchCoreApi.Common.DB.Core
         /// </summary>
         /// <param name="column"></param>
         /// <param name="reader"></param>
-        /// <param name="unknowType">only use in an implicity RealType (T is object)</param>
         public DBValue(Column column, IDBFieldAccessor access, IDataReader reader) {
             Column = column;
             this.access = access;
@@ -32,12 +31,12 @@ namespace EnchCoreApi.Common.DB.Core
             else {
                 //object[] arr = new object[10];
                 //reader.GetValues(arr);
-                //var obj=reader.GetValue(0);
+                //var obj=reader.GetTypedValue(0);
                 this.value = access.Get<T>(reader, Column.Ordinal ?? reader.GetOrdinal(Column.Name));
             }
         }
 
-        public override string Serialize() {
+        public override string GetStatementPlainParam() {
             if (access is ITextStorgeFieldAccessor<T> tv) {
                 return $"'{tv.SerializeTextContent(value)}'";
             }
@@ -52,18 +51,30 @@ namespace EnchCoreApi.Common.DB.Core
             }
             return this.value?.ToString() ?? "null";
         }
-
-        public T Deserialize() {
+        public override object? GetStatementParam() {
+            if (access is ITextStorgeFieldAccessor<T> tv) {
+                return tv.SerializeTextContent(value);
+            }
+            else if (Column.JsonStorage) {
+                return JsonConvert.SerializeObject(value);
+            }
+            else if (value is bool flag) {
+                return flag.GetHashCode();
+            }
             return value;
         }
 
-        public override object DeserializeValueObj() {
-            return Deserialize();
+        public T? GetTypedValue() {
+            return value;
+        }
+
+        public override object? GetValue() {
+            return GetTypedValue();
         }
     }
     public class DBValue : Value {
         public override Column Column { get; protected set; }
-        private Value redirectedValue;
+        private readonly Value typedValue;
         private static Dictionary<Type, Func<object[], object>> constructs_reader = new Dictionary<Type, Func<object[], object>>();
         private static Dictionary<Type, Func<object[], object>> constructs_value = new Dictionary<Type, Func<object[], object>>();
         private Type GeniType { get; set; }
@@ -114,7 +125,7 @@ namespace EnchCoreApi.Common.DB.Core
         public DBValue(Column column, object value, IDBFieldAccessor access, Type type) {
             Column = column;
             GeniType = type;
-            redirectedValue = GetInstance(column, value, access, GeniType) as Value;
+            typedValue = (Value)GetInstance(column, value, access, GeniType);
         }
         /// <summary>
         /// 
@@ -124,15 +135,19 @@ namespace EnchCoreApi.Common.DB.Core
         public DBValue(IDataReader reader, Column column, IDBFieldAccessor access, Type type) {
             Column = column;
             GeniType = type;
-            redirectedValue = GetInstance(column, reader, access, GeniType) as Value;
+            typedValue = (Value)GetInstance(column, reader, access, GeniType);
         }
 
-        public override object DeserializeValueObj() {
-            return redirectedValue.DeserializeValueObj();
+        public override object? GetValue() {
+            return typedValue.GetValue();
         }
 
-        public override string Serialize() {
-            return redirectedValue.Serialize();
+        public override string GetStatementPlainParam() {
+            return typedValue.GetStatementPlainParam();
+        }
+
+        public override object? GetStatementParam() {
+            return typedValue.GetStatementParam();
         }
     }
 }

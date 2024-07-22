@@ -2,8 +2,10 @@
 using EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler;
 using EnchCoreApi.Common.Dynamic;
 
-namespace EnchCoreApi.Common.Compiler {
-    public class CompileResult {
+namespace EnchCoreApi.Common.Compiler
+{
+    public class CompileResult
+    {
         public CompileResult(CompileResultData data) {
             ProjectileName = data.ProjectileName;
             Success = data.Success;
@@ -27,7 +29,8 @@ namespace EnchCoreApi.Common.Compiler {
         private CompilerError[] errors;
         public IReadOnlyList<CompilerError> Errors => errors;
     }
-    public class CompileResultData : SerializableData {
+    public class CompileResultData : SerializableData
+    {
 
         public CompileResultData(string projectileName, bool success, string outPutPath, int errorCount, InternalCompilerError[] errors) {
             ProjectileName = projectileName;
@@ -48,7 +51,8 @@ namespace EnchCoreApi.Common.Compiler {
         public int ErrorCount { get; set; }
         public InternalCompilerError[] Errors { get; set; }
 
-        public class InternalCompilerError {
+        public class InternalCompilerError
+        {
             public int Line { get; set; }
             public int Column { get; set; }
             public string ErrorNumber { get; set; }
@@ -88,26 +92,23 @@ namespace EnchCoreApi.Common.Compiler {
             }
         }
 
-        protected override void Serialize(BinaryWriter writer)
-        {
+        protected override void Serialize(BinaryWriter writer) {
             writer.Write(ProjectileName);
             writer.Write(Success);
             writer.Write(OutPutPath);
             writer.Write(Errors.Length);
-            for (int i=0;i<Errors.Length;i++)
-            {
+            for (int i = 0; i < Errors.Length; i++) {
                 Errors[i].Serialize(writer);
             }
         }
 
-        protected override void Deserialize(BinaryReader reader)
-        {
+        protected override void Deserialize(BinaryReader reader) {
             ProjectileName = reader.ReadString();
             Success = reader.ReadBoolean();
             OutPutPath = reader.ReadString();
             int errorCount = reader.ReadInt32();
-            for(int i=0;i< errorCount; i++)
-            {
+            Errors = new InternalCompilerError[errorCount];
+            for (int i = 0; i < errorCount; i++) {
                 Errors[i] = new InternalCompilerError();
                 Errors[i].Deserialize(reader);
             }

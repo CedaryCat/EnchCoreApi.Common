@@ -3,6 +3,7 @@ using EnchCoreApi.Common.DB.DBVistor;
 using EnchCoreApi.Common.Utilities;
 using Microsoft.Data.Sqlite;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace EnchCoreApi.Common.DB.DBProvider
@@ -21,10 +22,26 @@ namespace EnchCoreApi.Common.DB.DBProvider
 
         private int Query(string query) {
             try {
-                using var db = Clone();
+                using var db = (SqliteConnection)Clone();
+                db.Open();
+                using var com = db.CreateCommand(); 
+                com.CommandText = query;
+                return com.ExecuteNonQuery();
+            }
+            catch (Exception ex) {
+                throw new Exception($"Fatal EnchCoreApi.Common initialization exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
+            }
+        }
+        private int Query(string query, IEnumerable<object?> _params) {
+            try {
+                using var db = (SqliteConnection)Clone();
                 db.Open();
                 using var com = db.CreateCommand();
                 com.CommandText = query;
+                int i = 0;
+                foreach (var p in _params) {
+                    com.Parameters.AddWithValue($"@p{++i}", p ?? DBNull.Value);
+                }
                 return com.ExecuteNonQuery();
             }
             catch (Exception ex) {
@@ -59,12 +76,28 @@ namespace EnchCoreApi.Common.DB.DBProvider
         }
 
         private QueryReader QueryReader(string query) {
-            try
-            {
-                var db = Clone();
+            try {
+                var db = (SqliteConnection)Clone();
                 db.Open();
                 var com = db.CreateCommand();
                 com.CommandText = query;
+                return new QueryReader(db, com.ExecuteReader(), new SqliteReaderBackup(DB, query, DBFieldAccessor), DBFieldAccessor);
+            }
+            catch (Exception ex) {
+                throw new Exception($"Fatal EnchCoreApi.Common initialization exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
+            }
+        }
+
+        private QueryReader QueryReader(string query, IEnumerable<object?> _params) {
+            try {
+                var db = (SqliteConnection)Clone();
+                db.Open();
+                var com = db.CreateCommand();
+                com.CommandText = query;
+                int i = 0;
+                foreach (var p in _params) {
+                    com.Parameters.AddWithValue($"@p{++i}", p ?? DBNull.Value);
+                }
                 return new QueryReader(db, com.ExecuteReader(), new SqliteReaderBackup(DB, query, DBFieldAccessor), DBFieldAccessor);
             }
             catch (Exception ex) {
@@ -167,30 +200,37 @@ namespace EnchCoreApi.Common.DB.DBProvider
         }
 
         public sealed override int DeleteRow<RowType>(IWhere<RowType> where) {
-            return Query($"DELETE FROM {where.Table.Name} {where.SerializeFullStatement()}");
+            ICollection<object?> _params = new List<object?>();
+            return Query($"DELETE FROM {where.Table.Name} {where.GetStatement(ref _params)}", _params);
         }
 
         public sealed override int InsertRow(Table table, params Value[] values) {
             var sbnames = new StringBuilder();
             var sbvalues = new StringBuilder();
             int count = 0;
+            ICollection<object?> _params = new List<object?>();
             foreach (var value in values) {
-                sbnames.Append(value.Column.Name);
-                sbvalues.Append(value.Column.AutoIncrement ? "null" : value.Serialize());
-
-                if (count != values.Length - 1) {
-                    sbnames.Append(", ");
-                    sbvalues.Append(", ");
-                }
-                count++;
+                _params.Add(value.Column.AutoIncrement ? null : value.GetStatementParam());
             }
-            return Query($"INSERT INTO {table.Name} ({sbnames}) VALUES ({sbvalues})");
+            return Query($"INSERT INTO {table.Name} ({string.Join(',', values.Select(v => v.Column.Name))}) VALUES ({string.Join(',', Enumerable.Range(1, values.Length).Select(i => $"@p{i}"))})", _params);
         }
 
         public sealed override int UpdateRow<RowType>(IWhere<RowType> where, params Value[] updates) {
             if (updates.Length == 0)
                 throw new ArgumentException("No values supplied");
-            return Query($"UPDATE {where.Table.Name} SET {string.Join(", ", updates.Where(v => !v.Column.AutoIncrement).Select(v => v.Column.Name + " = " + v.Serialize()))} {where.SerializeFullStatement()}");
+            var updateStatements = updates
+            .Where(v => !v.Column.AutoIncrement)
+            .Select((update, index) =>
+            {
+                return new {
+                    Statement = $"{update.Column.Name} = @p{index + 1}",
+                    Param = update.GetStatementParam()
+                };
+            })
+            .ToList();
+            var updateStatementString = string.Join(", ", updateStatements.Select(u => u.Statement));
+            ICollection<object?> parameters = updateStatements.Select(u => u.Param).ToList();
+            return Query($"UPDATE {where.Table.Name} SET {updateStatementString} {where.GetStatement(ref parameters)}", parameters);
         }
 
         public sealed override WhereTermiNode<RowType> NewInitialWhere<RowType>(Table table) {
@@ -198,23 +238,28 @@ namespace EnchCoreApi.Common.DB.DBProvider
         }
 
         public sealed override QueryReader SelectAll<RowType>(IWhere<RowType> where) {
-            return QueryReader($"SELECT * FROM {where.Table.Name} {where.SerializeFullStatement()}");
+            ICollection<object?> _params = new List<object?>();
+            return QueryReader($"SELECT * FROM {where.Table.Name} {where.GetStatement(ref _params)}", _params);
         }
 
         public sealed override QueryReader SelectAverage<RowType>(IWhere<RowType> where, Column column) {
-            return QueryReader($"SELECT AVG({column.Name}) FROM {where.Table.Name} {where.SerializeFullStatement()}");
+            ICollection<object?> _params = new List<object?>();
+            return QueryReader($"SELECT AVG({column.Name}) FROM {where.Table.Name} {where.GetStatement(ref _params)}", _params);
         }
 
         public sealed override QueryReader SelectMax<RowType>(IWhere<RowType> where, Column column) {
-            return QueryReader($"SELECT MAX({column.Name}) FROM {where.Table.Name} {where.SerializeFullStatement()}");
+            ICollection<object?> _params = new List<object?>();
+            return QueryReader($"SELECT MAX({column.Name}) FROM {where.Table.Name} {where.GetStatement(ref _params)}", _params);
         }
 
         public sealed override QueryReader SelectMin<RowType>(IWhere<RowType> where, Column column) {
-            return QueryReader($"SELECT MIN({column.Name}) FROM {where.Table.Name} {where.SerializeFullStatement()}");
+            ICollection<object?> _params = new List<object?>();
+            return QueryReader($"SELECT MIN({column.Name}) FROM {where.Table.Name} {where.GetStatement(ref _params)}", _params);
         }
 
         public sealed override QueryReader SelectSum<RowType>(IWhere<RowType> where, Column column) {
-            return QueryReader($"SELECT SUM({column.Name}) FROM {where.Table.Name} {where.SerializeFullStatement()}");
+            ICollection<object?> _params = new List<object?>();
+            return QueryReader($"SELECT SUM({column.Name}) FROM {where.Table.Name} {where.GetStatement(ref _params)}", _params);
         }
     }
 }

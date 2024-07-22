@@ -32,6 +32,8 @@ namespace EnchCoreApi.Common.DB {
             }
             int i = 0;
             foreach (var prop in typeInfo.GetRuntimeProperties()) {
+                if (prop.GetMethod is null || prop.SetMethod is null)
+                    continue;
                 if (!prop.GetMethod.IsPublic || !prop.SetMethod.IsPublic || prop.GetMethod.IsStatic || prop.SetMethod.IsStatic)
                     continue;
                 if (prop.GetCustomAttribute<ColumnIgnoreAttribute>() is not null)
@@ -106,7 +108,7 @@ namespace EnchCoreApi.Common.DB {
             var c = Table[column];
             var reader = Provider.SelectMax(where, c);
             if (reader.Read()) {
-                return new DBValue<T>(new Column($"Max({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).Deserialize();
+                return new DBValue<T>(new Column($"Max({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).GetTypedValue();
             }
             throw new NotImplementedException("No Row Founded");
         }
@@ -119,7 +121,7 @@ namespace EnchCoreApi.Common.DB {
             var c = Table[column];
             var reader = Provider.SelectMin(where, c);
             if (reader.Read()) {
-                return new DBValue<T>(new Column($"Min({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).Deserialize();
+                return new DBValue<T>(new Column($"Min({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).GetTypedValue();
             }
             throw new NotImplementedException("No Row Founded");
         }
@@ -132,7 +134,7 @@ namespace EnchCoreApi.Common.DB {
             var c = Table[column];
             var reader = Provider.SelectAverage(where, c);
             if (reader.Read()) {
-                return new DBValue<double>(new Column($"Avg({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).Deserialize();
+                return new DBValue<double>(new Column($"Avg({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).GetTypedValue();
             }
             throw new NotImplementedException("No Row Founded");
         }
@@ -145,7 +147,7 @@ namespace EnchCoreApi.Common.DB {
             var c = Table[column];
             var reader = Provider.SelectSum(where, c);
             if (reader.Read()) {
-                return new DBValue<T>(new Column($"Sum({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).Deserialize();
+                return new DBValue<T>(new Column($"Sum({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).GetTypedValue();
             }
             throw new NotImplementedException("No Row Founded");
         }

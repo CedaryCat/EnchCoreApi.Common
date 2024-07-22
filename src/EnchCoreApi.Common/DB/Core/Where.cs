@@ -87,7 +87,7 @@ namespace EnchCoreApi.Common.DB.Core {
             var c = Table[column];
             var reader = Provider.SelectMax(this, c);
             if (reader.Read()) {
-                return new DBValue<T>(new Column($"Max({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).Deserialize();
+                return new DBValue<T>(new Column($"Max({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).GetTypedValue();
             }
             throw new NotImplementedException("No Row Founded");
         }
@@ -96,7 +96,7 @@ namespace EnchCoreApi.Common.DB.Core {
             var c = Table[column];
             var reader = Provider.SelectMin(this, c);
             if (reader.Read()) {
-                return new DBValue<T>(new Column($"Min({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).Deserialize();
+                return new DBValue<T>(new Column($"Min({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).GetTypedValue();
             }
             throw new NotImplementedException("No Row Founded");
         }
@@ -105,7 +105,7 @@ namespace EnchCoreApi.Common.DB.Core {
             var c = Table[column];
             var reader = Provider.SelectSum(this, c);
             if (reader.Read()) {
-                return new DBValue<T>(new Column($"Sum({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).Deserialize();
+                return new DBValue<T>(new Column($"Sum({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).GetTypedValue();
             }
             throw new NotImplementedException("No Row Founded");
         }
@@ -114,14 +114,25 @@ namespace EnchCoreApi.Common.DB.Core {
             var c = Table[column];
             var reader = Provider.SelectAverage(this, c);
             if (reader.Read()) {
-                return new DBValue<double>(new Column($"Avg({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).Deserialize();
+                return new DBValue<double>(new Column($"Avg({column})", 0, c.RealType, null), Provider.DBFieldAccessor, reader.Reader).GetTypedValue();
             }
             throw new NotImplementedException("No Row Founded");
         }
         #endregion
 
-        public virtual string SerializeFullStatement() {
-            return (this as IWhere<RowType>).IsEmpty ? "" : $"WHERE {(this as IWhere<RowType>).SerializeContent()}";
+        public virtual string GetPlainStatement() {
+            return ((IWhere<RowType>)this).IsEmpty ? "" : $"WHERE {((IWhere<RowType>)this).GetPlainStatementContent()}";
+        }
+        public virtual string GetStatement(ref ICollection<object?> paramCollector) {
+            return ((IWhere<RowType>)this).IsEmpty ? "" : $"WHERE {((IWhere<RowType>)this).GetStatementContent(ref paramCollector)}";
+        }
+
+        string IWhere<RowType>.GetPlainStatementContent() {
+            throw new NotImplementedException();
+        }
+
+        string IWhere<RowType>.GetStatementContent(ref ICollection<object?> paramCollector) {
+            throw new NotImplementedException();
         }
 
         #region Interface
@@ -248,10 +259,6 @@ namespace EnchCoreApi.Common.DB.Core {
         }
 
         IWhere<RowType> IWhere<RowType>.OrEqualToSum(string column, IWhere<RowType> scope) {
-            throw new NotImplementedException();
-        }
-
-        string IWhere<RowType>.SerializeContent() {
             throw new NotImplementedException();
         }
         #endregion

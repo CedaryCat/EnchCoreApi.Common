@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.Xna.Framework;
+using System.Text;
 
 namespace EnchCoreApi.Common.Utilities {
     public class RandomHelper {

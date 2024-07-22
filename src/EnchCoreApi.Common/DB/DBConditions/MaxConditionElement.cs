@@ -11,8 +11,11 @@ namespace EnchCoreApi.Common.DB.DBConditions {
             Table = table;
             Scope = scope;
         }
-        public virtual string SerializeToText() {
-            return $"{Column.Name}=(Select Max({Column.Name}) from {(Scope?.IsEmpty ?? true ? Table.Name : $"(Select * from {Table.Name} where {Scope.SerializeContent()})")})";
+        public virtual string GetPlainStatement() {
+            return $"{Column.Name}=(Select Max({Column.Name}) from {(Scope?.IsEmpty ?? true ? Table.Name : $"(Select * from {Table.Name} where {Scope.GetPlainStatementContent()})")})";
+        }
+        public string GetStatement(ref ICollection<object?> paramCollector) {
+            return $"{Column.Name}=(Select Max({Column.Name}) from {(Scope?.IsEmpty ?? true ? Table.Name : $"(Select * from {Table.Name} where {Scope.GetStatementContent(ref paramCollector)})")})";
         }
     }
 }

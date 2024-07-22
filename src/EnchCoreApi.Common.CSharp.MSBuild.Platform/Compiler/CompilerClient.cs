@@ -14,7 +14,7 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler {
 
             csc.WriteLine(parameter.GetBase64());
 
-            while (csc.Running) {
+            while (csc.Running && !hasError) {
                 Thread.Sleep(50);
             }
 
@@ -35,7 +35,10 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler {
         private void Csc_ErrorTextReceived(object? sender, string e) {
             if (!string.IsNullOrWhiteSpace(e)) {
                 Console.WriteLine(e);
+                hasError = true;
             }
         }
+
+        bool hasError = false;
     }
 }

@@ -6,8 +6,12 @@ namespace EnchCoreApi.Common.DB.DBConditions {
         public EqualConditionElement(Value value) {
             Value = value;
         }
-        public virtual string SerializeToText() {
-            return $"{Value.Column.Name}={Value.Serialize()}";
+        public virtual string GetPlainStatement() {
+            return $"{Value.Column.Name}={Value.GetStatementPlainParam()}";
+        }
+        public string GetStatement(ref ICollection<object?> paramCollector) {
+            paramCollector.Add(Value.GetStatementParam());
+            return $"{Value.Column.Name}=@p{paramCollector.Count}";
         }
     }
 }

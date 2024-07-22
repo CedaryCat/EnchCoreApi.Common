@@ -1,4 +1,4 @@
 ﻿namespace EnchCoreApi.Common.DB.DBAttribute {
-    internal class ColumnIgnoreAttribute : Attribute {
+    public class ColumnIgnoreAttribute : Attribute {
     }
 }

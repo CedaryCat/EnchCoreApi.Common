@@ -11,8 +11,11 @@ namespace EnchCoreApi.Common.DB.DBConditions {
             Table = table;
             Scope = sumScope;
         }
-        public virtual string SerializeToText() {
-            return $"{Column.Name}=(Select Sum({Column.Name}) from {(Scope?.IsEmpty ?? true ? Table.Name : $"(Select * from {Table.Name} where {Scope.SerializeContent()})")})";
+        public virtual string GetPlainStatement() {
+            return $"{Column.Name}=(Select Sum({Column.Name}) from {(Scope?.IsEmpty ?? true ? Table.Name : $"(Select * from {Table.Name} where {Scope.GetPlainStatementContent()})")})";
+        }
+        public string GetStatement(ref ICollection<object?> paramCollector) {
+            return $"{Column.Name}=(Select Sum({Column.Name}) from {(Scope?.IsEmpty ?? true ? Table.Name : $"(Select * from {Table.Name} where {Scope.GetStatementContent(ref paramCollector)})")})";
         }
     }
 }

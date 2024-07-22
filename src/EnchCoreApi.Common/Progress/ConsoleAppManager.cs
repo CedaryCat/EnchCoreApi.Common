@@ -4,6 +4,7 @@ using System.Text;
 public class ConsoleAppManager : IDisposable {
     private readonly string appName;
     private readonly Process process = new Process();
+    public ProcessStartInfo StartInfo => process.StartInfo;
     private readonly object theLock = new object();
     private SynchronizationContext? context;
     private string? pendingWriteData;

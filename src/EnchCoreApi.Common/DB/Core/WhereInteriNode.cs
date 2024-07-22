@@ -223,12 +223,25 @@ namespace EnchCoreApi.Common.DB.Core {
         }
         #endregion
 
-        public virtual string SerializeContent() {
+        public virtual string GetPlainStatementContent() {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < Nodes.Count; i++) {
-                stringBuilder.Append("(");
-                stringBuilder.Append(Nodes[i].SerializeContent());
-                stringBuilder.Append(")");
+                stringBuilder.Append('(');
+                stringBuilder.Append(Nodes[i].GetPlainStatementContent());
+                stringBuilder.Append(')');
+                if (i != Nodes.Count - 1) {
+                    stringBuilder.Append(" or ");
+                }
+            } 
+            return stringBuilder.ToString();
+        }
+
+        public virtual string GetStatementContent(ref ICollection<object?> paramCollector) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < Nodes.Count; i++) {
+                stringBuilder.Append('(');
+                stringBuilder.Append(Nodes[i].GetStatementContent(ref paramCollector));
+                stringBuilder.Append(')');
                 if (i != Nodes.Count - 1) {
                     stringBuilder.Append(" or ");
                 }
