@@ -8,7 +8,7 @@
 	  <LangVersion>11</LangVersion>
 	  <TieredPGO>true</TieredPGO>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	  <Configurations>Debug;Release;ForTerrariaPlugin_Debug;ForTerrariaPlugin_Release</Configurations>
+	  <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
 	<PropertyGroup>
