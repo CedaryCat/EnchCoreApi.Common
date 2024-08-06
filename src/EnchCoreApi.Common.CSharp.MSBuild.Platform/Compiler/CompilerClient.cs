@@ -28,8 +28,13 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler {
         }
 
         private void Csc_StandartTextReceived(object? sender, string e) {
-            var data = new CompileResultData(e);
-            CompileResult = new CompileResult(data);
+            try {
+                var data = new CompileResultData(e);
+                CompileResult = new CompileResult(data);
+            }
+            catch {
+                Console.WriteLine(e);
+            }
         }
 
         private void Csc_ErrorTextReceived(object? sender, string e) {

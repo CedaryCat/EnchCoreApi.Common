@@ -122,8 +122,8 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform {
                 process.StartInfo.RedirectStandardOutput = true;
                 process.Start();
 
-                string output = process.StandardOutput.ReadToEnd();
-                Console.WriteLine(output);
+                //string output = process.StandardOutput.ReadToEnd();
+                //Console.WriteLine(output);
                 process.WaitForExit();
             }
             return Builded = Project.Build((MSCompileLogger)logger);
