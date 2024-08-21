@@ -1,8 +1,10 @@
 ﻿using HttpServer;
 using System.Text.RegularExpressions;
 
-namespace EnchCoreApi.Common.Net.Restful {
-    public class RestCommand {
+namespace EnchCoreApi.Common.Net.Restful
+{
+    public class RestCommand
+    {
         public string Name { get; protected set; }
         public string UriTemplate { get; protected set; }
         public string UriVerbMatch { get; protected set; }
@@ -11,7 +13,7 @@ namespace EnchCoreApi.Common.Net.Restful {
         public string Permission { get; protected set; }
         public bool DoLog { get; set; }
 
-        private RestCommandD callback;
+        private readonly RestCommandD callback;
 
         /// <summary>
         /// Creates a new <see cref="RestCommand"/> used with the REST API

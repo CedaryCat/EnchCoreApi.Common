@@ -11,41 +11,33 @@ namespace EnchCoreApi.Common.DB.DBVistor
         private QueryReaderBackup Backup { get; set; }
         public IDBFieldAccessor FieldAccessor { get; set; }
 
-        public QueryReader(IDbConnection conn, IDataReader reader, QueryReaderBackup backup, IDBFieldAccessor dbAccess)
-        {
+        public QueryReader(IDbConnection conn, IDataReader reader, QueryReaderBackup backup, IDBFieldAccessor dbAccess) {
             Connection = conn;
             Reader = reader;
             Backup = backup;
             FieldAccessor = dbAccess;
         }
 
-        public object Clone()
-        {
+        public object Clone() {
             return Backup.CreateReader();
         }
 
-        ~QueryReader()
-        {
+        ~QueryReader() {
             Dispose(false);
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (Reader != null)
-                {
+        protected virtual void Dispose(bool disposing) {
+            if (disposing) {
+                if (Reader != null) {
                     Reader.Dispose();
                     Reader = null;
                 }
-                if (Connection != null)
-                {
+                if (Connection != null) {
                     Connection.Dispose();
                     Connection = null;
                 }
@@ -53,16 +45,14 @@ namespace EnchCoreApi.Common.DB.DBVistor
         }
 
         [MemberNotNullWhen(true, nameof(Reader))]
-        public bool Read()
-        {
+        public bool Read() {
             if (Reader == null)
                 return false;
             return Reader.Read();
         }
 
         [MemberNotNull(nameof(Reader))]
-        public T Get<T>(Column column)
-        {
+        public T Get<T>(Column column) {
             if (Reader == null) throw new ObjectDisposedException(nameof(Reader));
             return new DBValue<T>(column, FieldAccessor, Reader).GetTypedValue();
         }

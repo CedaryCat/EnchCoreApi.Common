@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
 
-namespace EnchCoreApi.Common.CSharp.MSBuild {
-    public class CompilerError {
+namespace EnchCoreApi.Common.CSharp.MSBuild
+{
+    public class CompilerError
+    {
         public int Line { get; set; }
 
         public int Column { get; set; }

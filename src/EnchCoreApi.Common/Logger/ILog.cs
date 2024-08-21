@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.Logger {
-    public interface ILog {
+﻿namespace EnchCoreApi.Common.Logger
+{
+    public interface ILog
+    {
         public void ConsoleLog(string log);
         public void ConsoleInfoLog(string log);
         public void ConsoleSuccessLog(string log);

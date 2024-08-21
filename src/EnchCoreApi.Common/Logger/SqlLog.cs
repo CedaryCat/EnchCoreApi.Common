@@ -1,7 +1,9 @@
 ﻿using EnchCoreApi.Common.DB;
 
-namespace EnchCoreApi.Common.Logger {
-    public class SqlLog : GenericLog {
+namespace EnchCoreApi.Common.Logger
+{
+    public class SqlLog : GenericLog
+    {
         public SqlLog(string name, DBService db) : base(name) {
             table = db.CreateTableService<LogItem>();
             table.EnsureTableStructure();
@@ -17,7 +19,8 @@ namespace EnchCoreApi.Common.Logger {
                 Date = DateTime.Now,
             });
         }
-        public class LogItem {
+        public class LogItem
+        {
             public string Source { get; set; }
             public string Message { get; set; }
             public string Type { get; set; }

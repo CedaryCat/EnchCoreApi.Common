@@ -1,8 +1,10 @@
 ﻿using System.CodeDom.Compiler;
 using System.Text;
 
-namespace EnchCoreApi.Common.CSharp {
-    public class CSharpClassBuilder : CSharpFileBuilder {
+namespace EnchCoreApi.Common.CSharp
+{
+    public class CSharpClassBuilder : CSharpFileBuilder
+    {
         public CSharpClassBuilder(string sourceDir, string nameSpace, string className, string baseClass, params string?[] referencedNamespace) : this(sourceDir, nameSpace, className, referencedNamespace) {
             BaseClass = baseClass;
         }

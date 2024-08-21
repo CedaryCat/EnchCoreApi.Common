@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.Logger {
-    public class ConsoleLog : GenericLog {
+﻿namespace EnchCoreApi.Common.Logger
+{
+    public class ConsoleLog : GenericLog
+    {
         public ConsoleLog(string name) : base(name) {
 
         }

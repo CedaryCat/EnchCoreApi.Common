@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using System.Text;
+﻿using System.Text;
 
-namespace EnchCoreApi.Common.Utilities {
-    public class RandomHelper {
-        private Random rand;
+namespace EnchCoreApi.Common.Utilities
+{
+    public class RandomHelper
+    {
+        private readonly Random rand;
         public RandomHelper(int seed) {
             rand = new Random(seed);
         }

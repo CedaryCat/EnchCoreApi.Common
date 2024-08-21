@@ -1,4 +1,5 @@
-﻿namespace EnchCoreApi.Common.Net.Sockets {
+﻿namespace EnchCoreApi.Common.Net.Sockets
+{
     public delegate void ClientGetData(Client client, byte[] buffer, int offset, int length);
     public delegate void ClientLostConnection(Client client, bool isException, Exception ex = null);
     public delegate void ClientGetException(Client client, ClientException ex);

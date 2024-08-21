@@ -1,7 +1,9 @@
 ﻿using System.Linq.Expressions;
 
-namespace EnchCoreApi.Common.Dynamic {
-    public class Constructor {
+namespace EnchCoreApi.Common.Dynamic
+{
+    public class Constructor
+    {
         public Func<object[], object> Creator;
         public Func<object> NoParamsCreator;
         private Constructor(Func<object[], object> func) {
@@ -41,7 +43,8 @@ namespace EnchCoreApi.Common.Dynamic {
             return NoParamsCreator();
         }
     }
-    public class Constructor<Tobj> {
+    public class Constructor<Tobj>
+    {
         public Func<object[], Tobj> Creator;
         public Func<Tobj> NoParamsCreator;
         private Constructor(Func<object[], Tobj> func) {
@@ -86,7 +89,8 @@ namespace EnchCoreApi.Common.Dynamic {
             return NoParamsCreator();
         }
     }
-    public class ConstructorFunc<TFunc> where TFunc : Delegate {
+    public class ConstructorFunc<TFunc> where TFunc : Delegate
+    {
         public TFunc Creator;
         private ConstructorFunc(TFunc func) {
             Creator = func;

@@ -1,8 +1,10 @@
 ﻿using EnchCoreApi.Common.DB.DBProvider;
 using System.Text;
 
-namespace EnchCoreApi.Common.DB.Core {
-    public class WhereInteriNode<RowType> : Where<RowType>, IWhere<RowType> where RowType : new() {
+namespace EnchCoreApi.Common.DB.Core
+{
+    public class WhereInteriNode<RowType> : Where<RowType>, IWhere<RowType> where RowType : new()
+    {
         public bool IsEmpty => Nodes.Count == 0;
         public List<IWhere<RowType>> Nodes { get; private set; } = new List<IWhere<RowType>>();
         protected virtual Func<Table, WhereTermiNode<RowType>> WhereTermiNode => (t) => new WhereTermiNode<RowType>(t, Provider);
@@ -232,7 +234,7 @@ namespace EnchCoreApi.Common.DB.Core {
                 if (i != Nodes.Count - 1) {
                     stringBuilder.Append(" or ");
                 }
-            } 
+            }
             return stringBuilder.ToString();
         }
 

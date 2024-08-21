@@ -1,7 +1,9 @@
 ﻿using EnchCoreApi.Common.DB.Core;
 
-namespace EnchCoreApi.Common.DB.DBConditions {
-    public class AvgConditionElement<RowType> : IConditionElement where RowType : new() {
+namespace EnchCoreApi.Common.DB.DBConditions
+{
+    public class AvgConditionElement<RowType> : IConditionElement where RowType : new()
+    {
         public Column Column { get; protected set; }
         public Table Table { get; protected set; }
         public IWhere<RowType>? Scope { get; protected set; }

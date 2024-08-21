@@ -1,8 +1,10 @@
 ﻿using EnchCoreApi.Common.DB.DBProvider;
 using System.Data;
 
-namespace EnchCoreApi.Common.DB {
-    public class DBService {
+namespace EnchCoreApi.Common.DB
+{
+    public class DBService
+    {
         public IDbConnection db;
         protected DBAccessAbstractProvider Provider { get; set; }
         protected DBService(DBAccessAbstractProvider provider) {

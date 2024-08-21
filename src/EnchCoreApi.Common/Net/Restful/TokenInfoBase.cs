@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.Net.Restful {
-    public class TokenInfoBase {
+﻿namespace EnchCoreApi.Common.Net.Restful
+{
+    public class TokenInfoBase
+    {
         public TokenInfoBase(string name, string token) {
             UserName = name;
             Token = token;

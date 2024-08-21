@@ -1,10 +1,12 @@
-﻿namespace EnchCoreApi.Common {
-    public class AccessSecureDict<TKey, TValue> : IDictionary<TKey, TValue> where TKey : notnull where TValue : struct {
-        private Dictionary<TKey, TValue> _dict;
+﻿namespace EnchCoreApi.Common
+{
+    public class AccessSecureDict<TKey, TValue> : IDictionary<TKey, TValue> where TKey : notnull where TValue : struct
+    {
+        private readonly Dictionary<TKey, TValue> _dict;
 
-        private Func<TValue>? _getDefaultValue;
+        private readonly Func<TValue>? _getDefaultValue;
 
-        private Func<TKey, TValue>? _getDefaultValue2;
+        private readonly Func<TKey, TValue>? _getDefaultValue2;
         public AccessSecureDict() {
             _dict = new Dictionary<TKey, TValue>();
             _getDefaultValue = delegate { return default; };
@@ -130,12 +132,13 @@
         }
     }
 
-    public class AccessSecureRefDict<TKey, TValue> : IDictionary<TKey, TValue> where TKey : notnull where TValue : class {
-        private Dictionary<TKey, TValue> _dict;
+    public class AccessSecureRefDict<TKey, TValue> : IDictionary<TKey, TValue> where TKey : notnull where TValue : class
+    {
+        private readonly Dictionary<TKey, TValue> _dict;
 
-        private Func<TValue>? _getDefaultValue;
+        private readonly Func<TValue>? _getDefaultValue;
 
-        private Func<TKey, TValue>? _getDefaultValue2;
+        private readonly Func<TKey, TValue>? _getDefaultValue2;
         public AccessSecureRefDict(TValue defValue) {
             _dict = new Dictionary<TKey, TValue>();
             _getDefaultValue = delegate { return defValue; };

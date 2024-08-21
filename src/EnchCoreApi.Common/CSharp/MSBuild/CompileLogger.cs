@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.CSharp.MSBuild {
-    public abstract class CompileLogger : ICompileLogger {
+﻿namespace EnchCoreApi.Common.CSharp.MSBuild
+{
+    public abstract class CompileLogger : ICompileLogger
+    {
         public CompileLogger(string logDir) {
             Directory.CreateDirectory(logDir);
             LogDir = logDir;

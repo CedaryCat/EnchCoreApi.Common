@@ -1,7 +1,9 @@
 ﻿using Microsoft.Build.Framework;
 
-namespace EnchCoreApi.Common.CSharp.MSBuild.Platform {
-    public class MSCompileLogger : CompileLogger, ILogger {
+namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
+{
+    public class MSCompileLogger : CompileLogger, ILogger
+    {
         public MSCompileLogger(string logDir) : base(logDir) {
         }
         public LoggerVerbosity Verbosity { get; set; }

@@ -2,14 +2,16 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace EnchCoreApi.Common.Net {
-    public class NetHelper {
+namespace EnchCoreApi.Common.Net
+{
+    public class NetHelper
+    {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="iPorDomain"></param>
         /// <returns>不成功返回null</returns>
-        public static bool GetIPFromDomainOrIPText(string iPorDomain, [NotNullWhen(true)]out IPAddress? ip) {
+        public static bool GetIPFromDomainOrIPText(string iPorDomain, [NotNullWhen(true)] out IPAddress? ip) {
             if (!IPAddress.TryParse(iPorDomain, out ip)) {
                 ip = null;
                 var ips = Dns.GetHostAddresses(iPorDomain);

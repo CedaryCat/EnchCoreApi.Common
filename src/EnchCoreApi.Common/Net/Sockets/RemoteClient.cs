@@ -1,8 +1,10 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 
-namespace EnchCoreApi.Common.Net.Sockets {
-    public class RemoteClient {
+namespace EnchCoreApi.Common.Net.Sockets
+{
+    public class RemoteClient
+    {
         public RemoteClient(TcpClient connection, int bufferLen = 8 * 1024) {
             bufferLength = bufferLen;
             socket = connection;
@@ -130,12 +132,12 @@ namespace EnchCoreApi.Common.Net.Sockets {
         /// <summary>
         /// 接收缓冲区
         /// </summary>
-        private byte[] RecBuffer = new byte[8 * 1024];
+        private readonly byte[] RecBuffer = new byte[8 * 1024];
         /// <summary>
         /// 发送缓冲区
         /// </summary>
-        private byte[] SendBuffer = new byte[8 * 1024];
-        private BinaryWriter SendBufferWriter;
+        private readonly byte[] SendBuffer = new byte[8 * 1024];
+        private readonly BinaryWriter SendBufferWriter;
         /// <summary>
         /// 当前IP地址,端口号
         /// </summary>

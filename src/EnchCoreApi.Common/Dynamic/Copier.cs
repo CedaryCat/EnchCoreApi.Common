@@ -1,12 +1,14 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace EnchCoreApi.Common.Dynamic {
+namespace EnchCoreApi.Common.Dynamic
+{
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class CopyFieldAttribute : Attribute { }
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class CopyIgnoreFieldAttribute : Attribute { }
-    public static class Copier<Tobj> {
+    public static class Copier<Tobj>
+    {
         /// <summary>
         /// (from,to)
         /// </summary>
@@ -83,7 +85,8 @@ namespace EnchCoreApi.Common.Dynamic {
             }
         }
     }
-    public static class Copier<TFrom, TTo> {
+    public static class Copier<TFrom, TTo>
+    {
         public static Func<TFrom, TTo, TTo> AllCopyAction = (f, t) => t;
         public static Func<TFrom, TTo, TTo> FieldCopyAction = (f, t) => t;
         public static Func<TFrom, TTo, TTo> PropertyCopyAction = (f, t) => t;

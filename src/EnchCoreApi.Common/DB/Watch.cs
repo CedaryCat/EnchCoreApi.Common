@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 
-namespace EnchCoreApi.Common.DB {
-    public class Watch {
+namespace EnchCoreApi.Common.DB
+{
+    public class Watch
+    {
         public static Watch w = new Watch();
-        private Stopwatch sw = new Stopwatch();
+        private readonly Stopwatch sw = new Stopwatch();
         private string Name;
         public void Start(string name) {
             if (Name != null) {

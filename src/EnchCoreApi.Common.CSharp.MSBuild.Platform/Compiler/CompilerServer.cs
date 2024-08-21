@@ -1,7 +1,9 @@
 ﻿using EnchCoreApi.Common.Compiler;
 
-namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler {
-    public abstract class CompilerServer {
+namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler
+{
+    public abstract class CompilerServer
+    {
         public void Run() {
             var param = new CompileParameter();
             param.FromBase64(Console.ReadLine() ?? throw new Exception());

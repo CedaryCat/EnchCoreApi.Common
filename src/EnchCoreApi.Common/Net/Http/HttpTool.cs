@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 
-namespace EnchCoreApi.Common.Net.Http {
-    public static class HttpTool {
+namespace EnchCoreApi.Common.Net.Http
+{
+    public static class HttpTool
+    {
         public static string ToParameter(Dictionary<string, string> source, HttpContentType type) {
             if (type == HttpContentType.Json) {
                 return JsonConvert.SerializeObject(source);
@@ -38,7 +40,8 @@ namespace EnchCoreApi.Common.Net.Http {
             {HttpContentType.UrlEncode, "application/x-www-form-urlencoded" },
         };
     }
-    public enum HttpContentType {
+    public enum HttpContentType
+    {
         Json,
         UrlEncode,
     }

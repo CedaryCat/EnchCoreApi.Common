@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.Utilities {
-    public abstract class ConfigHelper {
+﻿namespace EnchCoreApi.Common.Utilities
+{
+    public abstract class ConfigHelper
+    {
         public abstract T LoadFromFile<T>(string filePath) where T : class, new();
         /// <summary>
         /// 

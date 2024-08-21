@@ -4,18 +4,15 @@ namespace EnchCoreApi.Common.DB.DBVistor
 {
     public class DefaultFieldAccessor : IDBFieldAccessor, ITextStorgeFieldAccessor<DateTime>
     {
-        public T Get<T>(IDataReader reader, int column)
-        {
+        public T Get<T>(IDataReader reader, int column) {
             return ((IDBFieldGetter<T>)this).Get(reader, column);
         }
 
-        string ITextStorgeFieldAccessor<DateTime>.SerializeTextContent(DateTime from)
-        {
+        string ITextStorgeFieldAccessor<DateTime>.SerializeTextContent(DateTime from) {
             return from.ToString();
         }
 
-        DateTime ITextStorgeFieldAccessor<DateTime>.DeserializeFromTextContent(string str)
-        {
+        DateTime ITextStorgeFieldAccessor<DateTime>.DeserializeFromTextContent(string str) {
             return DateTime.Parse(str);
         }
 

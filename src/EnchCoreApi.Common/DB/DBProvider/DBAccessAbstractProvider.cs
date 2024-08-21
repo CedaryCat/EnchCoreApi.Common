@@ -120,7 +120,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
         public virtual void AppendAsyncAction(Action action) {
             tasks.Enqueue(action);
         }
-        private ConcurrentQueue<Action> tasks = new ConcurrentQueue<Action>();
+        private readonly ConcurrentQueue<Action> tasks = new ConcurrentQueue<Action>();
         public DBAccessAbstractProvider() {
             new Task(() => {
                 while (true) {

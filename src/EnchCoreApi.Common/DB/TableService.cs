@@ -4,8 +4,10 @@ using EnchCoreApi.Common.DB.DBProvider;
 using EnchCoreApi.Common.Dynamic;
 using System.Reflection;
 
-namespace EnchCoreApi.Common.DB {
-    public class TableService<RowType> where RowType : new() {
+namespace EnchCoreApi.Common.DB
+{
+    public class TableService<RowType> where RowType : new()
+    {
         protected DBAccessAbstractProvider Provider { get; set; }
         public Table Table { get; protected set; }
         private TableService(DBAccessAbstractProvider provider, Table table) {

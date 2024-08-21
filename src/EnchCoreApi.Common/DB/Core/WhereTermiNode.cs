@@ -2,8 +2,10 @@
 using EnchCoreApi.Common.DB.DBProvider;
 using System.Text;
 
-namespace EnchCoreApi.Common.DB.Core {
-    public class WhereTermiNode<RowType> : Where<RowType>, IWhere<RowType> where RowType : new() {
+namespace EnchCoreApi.Common.DB.Core
+{
+    public class WhereTermiNode<RowType> : Where<RowType>, IWhere<RowType> where RowType : new()
+    {
         public bool IsEmpty => Leaf.Count == 0;
         public List<IConditionElement> Leaf { get; private set; } = new List<IConditionElement>();
         protected virtual Func<Value, EqualConditionElement> EqualCondition => (value) => new EqualConditionElement(value);

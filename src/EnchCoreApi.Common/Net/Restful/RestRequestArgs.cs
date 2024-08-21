@@ -1,11 +1,13 @@
 ﻿using HttpServer;
 
-namespace EnchCoreApi.Common.Net.Restful {
+namespace EnchCoreApi.Common.Net.Restful
+{
 
     /// <summary>
     /// Describes the data contained in a REST request
     /// </summary>
-    public class RestRequestArgs {
+    public class RestRequestArgs
+    {
         /// <summary>
         /// Verbs sent in the request
         /// </summary>

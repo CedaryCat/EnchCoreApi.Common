@@ -1,7 +1,9 @@
 ﻿using System.CodeDom.Compiler;
 
-namespace EnchCoreApi.Common.CSharp {
-    public abstract class CSharpFileBuilder {
+namespace EnchCoreApi.Common.CSharp
+{
+    public abstract class CSharpFileBuilder
+    {
         public CSharpFileBuilder(string sourceDir) {
             SourceDir = sourceDir;
         }

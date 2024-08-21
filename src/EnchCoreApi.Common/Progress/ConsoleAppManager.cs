@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-public class ConsoleAppManager : IDisposable {
+public class ConsoleAppManager : IDisposable
+{
     private readonly string appName;
     private readonly Process process = new Process();
     public ProcessStartInfo StartInfo => process.StartInfo;

@@ -3,17 +3,17 @@ using EnchCoreApi.Common.Dynamic;
 
 namespace EnchCoreApi.Common.DB.Core
 {
-    public class Row<RowType> : IDisposable where RowType : new() {
+    public class Row<RowType> : IDisposable where RowType : new()
+    {
         public Table Table { get; private set; }
-        private QueryReader QueryReader;
+        private readonly QueryReader QueryReader;
         private static readonly Func<RowType> func = Constructor<RowType>.Create().NoParamsCreator;
         internal Row(Table table, QueryReader queryreader, bool canDispose) {
             Table = table;
             QueryReader = queryreader;
             CanDispose = canDispose;
         }
-        public void Dispose()
-        {
+        public void Dispose() {
             QueryReader?.Dispose();
         }
         public T Get<T>(string column, bool dispose = true) {

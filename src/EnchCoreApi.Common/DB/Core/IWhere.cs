@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.DB.Core {
-    public interface IWhere<RowType> where RowType : new() {
+﻿namespace EnchCoreApi.Common.DB.Core
+{
+    public interface IWhere<RowType> where RowType : new()
+    {
         public Table Table { get; }
         public bool IsEmpty { get; }
 

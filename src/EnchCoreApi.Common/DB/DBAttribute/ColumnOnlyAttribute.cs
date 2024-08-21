@@ -1,4 +1,6 @@
-﻿namespace EnchCoreApi.Common.DB.DBAttribute {
-    public class ColumnOnlyAttribute : Attribute {
+﻿namespace EnchCoreApi.Common.DB.DBAttribute
+{
+    public class ColumnOnlyAttribute : Attribute
+    {
     }
 }

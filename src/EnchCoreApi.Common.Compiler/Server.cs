@@ -1,38 +1,28 @@
 ﻿using EnchCoreApi.Common.CSharp.MSBuild;
 using EnchCoreApi.Common.CSharp.MSBuild.Platform;
 using EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EnchCoreApi.Common.Compiler
 {
     public class Server : CompilerServer
     {
-        public override bool Build(out string projectName,out string output, out CompilerError[] errors)
-        {
+        public override bool Build(out string projectName, out string output, out CompilerError[] errors) {
             projectName = Project.ProjectFile.Name;
             output = Project.OutPutPath;
             var res = Project.Build(CompileLogger);
-            if (CompileLogger.CompilerErrors.Count > 0)
-            {
+            if (CompileLogger.CompilerErrors.Count > 0) {
                 errors = new CompilerError[CompileLogger.CompilerErrors.Count];
-                for(int i=0;i<errors.Length;i++)
-                {
+                for (int i = 0; i < errors.Length; i++) {
                     errors[i] = CompileLogger.CompilerErrors[i];
                 }
             }
-            else
-            {
+            else {
                 errors = Array.Empty<CompilerError>();
             }
             return res;
         }
 
-        public override void LoadProject(string projectPath, string loggerDir, IProjectProperties properties, IProjectReferences references)
-        {
+        public override void LoadProject(string projectPath, string loggerDir, IProjectProperties properties, IProjectReferences references) {
             CompilePlatform platform = new CompilePlatform(false);
 
             Project = platform.CreateProject(projectPath);
@@ -46,7 +36,7 @@ namespace EnchCoreApi.Common.Compiler
             CompileLogger = platform.CreateCompileLogger(loggerDir);
         }
 
-        Project Project;
-        CompileLogger CompileLogger;
+        private Project Project;
+        private CompileLogger CompileLogger;
     }
 }

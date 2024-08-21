@@ -1,6 +1,5 @@
 ﻿using EnchCoreApi.Common.CSharp.MSBuild;
 using EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler;
-using EnchCoreApi.Common.Dynamic;
 
 namespace EnchCoreApi.Common.Compiler
 {
@@ -26,7 +25,7 @@ namespace EnchCoreApi.Common.Compiler
         public bool Success { get; private set; }
         public string OutPutPath { get; private set; }
 
-        private CompilerError[] errors;
+        private readonly CompilerError[] errors;
         public IReadOnlyList<CompilerError> Errors => errors;
     }
     public class CompileResultData : SerializableData

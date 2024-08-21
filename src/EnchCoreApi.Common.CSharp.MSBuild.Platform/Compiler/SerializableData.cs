@@ -1,8 +1,9 @@
-﻿using EnchCoreApi.Common.Dynamic;
-using System.Text;
+﻿using System.Text;
 
-namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler {
-    public abstract class SerializableData {
+namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler
+{
+    public abstract class SerializableData
+    {
         static SerializableData() {
         }
 

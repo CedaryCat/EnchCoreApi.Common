@@ -1,7 +1,9 @@
 ﻿using System.Linq.Expressions;
 
-namespace EnchCoreApi.Common.Dynamic {
-    public abstract class LoopsExpression {
+namespace EnchCoreApi.Common.Dynamic
+{
+    public abstract class LoopsExpression
+    {
         public static Expression ForWithDeclaredVaribale(IEnumerable<ParameterExpression> varitables, Expression continueCondition, IEnumerable<Expression> loopBody) {
             var _break = Expression.Label();
             List<Expression> body = new List<Expression>();

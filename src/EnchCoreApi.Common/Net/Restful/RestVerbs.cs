@@ -1,6 +1,8 @@
-﻿namespace EnchCoreApi.Common.Net.Restful {
+﻿namespace EnchCoreApi.Common.Net.Restful
+{
     [Serializable]
-    public class RestVerbs : Dictionary<string, string> {
+    public class RestVerbs : Dictionary<string, string>
+    {
         /// <summary>
         /// Gets value safely, if it does not exist, return null. Sets/Adds value safely, if null it will remove.
         /// </summary>

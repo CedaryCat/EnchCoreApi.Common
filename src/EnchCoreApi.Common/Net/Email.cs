@@ -2,8 +2,10 @@
 using System.Net.Mail;
 using System.Text;
 
-namespace EnchCoreApi.Common.Net {
-    public class STMPEmailSender {
+namespace EnchCoreApi.Common.Net
+{
+    public class STMPEmailSender
+    {
         public STMPEmailSender(string stmpServer, string mailAccount, string code) {
             StmpServer = stmpServer;
             Account = mailAccount;

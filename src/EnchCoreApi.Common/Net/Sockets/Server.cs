@@ -1,14 +1,16 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 
-namespace EnchCoreApi.Common.Net.Sockets {
-    public class Server : IDisposable {
+namespace EnchCoreApi.Common.Net.Sockets
+{
+    public class Server : IDisposable
+    {
         /// <summary>
         /// 指示是否初始化了IPEnd,使用Start()时必须确保此值为true
         /// </summary>
         public bool Initialized { get; protected set; } = false;
         public bool IsStop { get; protected set; }
-        private object obj = new object();
+        private readonly object obj = new object();
         /// <summary>
         /// 信号量
         /// </summary>

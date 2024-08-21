@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 
-namespace EnchCoreApi.Common.DB.Core {
-    public class Table : IEnumerable<Column> {
+namespace EnchCoreApi.Common.DB.Core
+{
+    public class Table : IEnumerable<Column>
+    {
         private IReadOnlyDictionary<string, Column> Columns { get; set; }
         public string Name { get; private set; }
         public int Length { get; private set; }

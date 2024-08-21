@@ -1,18 +1,18 @@
 ﻿using EnchCoreApi.Common.CSharp.MSBuild;
 using EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler;
-using EnchCoreApi.Common.Dynamic;
 using Terraria;
 
-namespace EnchCoreApi.Common.Compiler {
-    public class CompileParameter : SerializableData {
+namespace EnchCoreApi.Common.Compiler
+{
+    public class CompileParameter : SerializableData
+    {
 #nullable disable
         public string ProjectPath { get; set; }
         public string LoggerDirectory { get; set; }
         public Properties Properties { get; set; }
         public References References { get; set; }
 
-        protected override void Deserialize(BinaryReader reader)
-        {
+        protected override void Deserialize(BinaryReader reader) {
             ProjectPath = reader.ReadString();
             LoggerDirectory = reader.ReadString();
             Properties = new Properties();
@@ -21,8 +21,7 @@ namespace EnchCoreApi.Common.Compiler {
             References.Deserialize(reader);
         }
 
-        protected override void Serialize(BinaryWriter writer)
-        {
+        protected override void Serialize(BinaryWriter writer) {
             writer.Write(ProjectPath);
             writer.Write(LoggerDirectory);
             Properties.Serialize(writer);
@@ -30,7 +29,8 @@ namespace EnchCoreApi.Common.Compiler {
         }
 #nullable restore
     }
-    public class Properties : IProjectProperties {
+    public class Properties : IProjectProperties
+    {
 #nullable disable
         public Properties() {
 #nullable restore
@@ -134,7 +134,8 @@ namespace EnchCoreApi.Common.Compiler {
             }
         }
     }
-    public class References : IProjectReferences {
+    public class References : IProjectReferences
+    {
         public References() {
 
         }

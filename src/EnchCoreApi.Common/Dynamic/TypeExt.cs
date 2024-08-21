@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace EnchCoreApi.Common.Dynamic {
-    public static class Dynamics {
+namespace EnchCoreApi.Common.Dynamic
+{
+    public static class Dynamics
+    {
         public static MethodInfo GetMethod<TInstance>(Expression<Action<TInstance>> methodReferance) {
             return (methodReferance.Body as MethodCallExpression).Method;
         }

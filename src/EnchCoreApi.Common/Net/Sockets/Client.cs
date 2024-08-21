@@ -1,8 +1,10 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 
-namespace EnchCoreApi.Common.Net.Sockets {
-    public class Client : IDisposable {
+namespace EnchCoreApi.Common.Net.Sockets
+{
+    public class Client : IDisposable
+    {
         /// <summary>
         /// 空构造
         /// </summary>
@@ -212,8 +214,8 @@ namespace EnchCoreApi.Common.Net.Sockets {
         /// <summary>
         /// 发送缓冲区
         /// </summary>
-        private byte[] SendBuffer;
-        private BinaryWriter SendBufferWriter;
+        private readonly byte[] SendBuffer;
+        private readonly BinaryWriter SendBufferWriter;
         /// <summary>
         /// 当前IP地址,端口号
         /// </summary>

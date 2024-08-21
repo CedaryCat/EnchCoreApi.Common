@@ -1,7 +1,9 @@
 ﻿using EnchCoreApi.Common.DB.DBProvider;
 
-namespace EnchCoreApi.Common.DB.Core {
-    public abstract class Where<RowType> : IWhere<RowType> where RowType : new() {
+namespace EnchCoreApi.Common.DB.Core
+{
+    public abstract class Where<RowType> : IWhere<RowType> where RowType : new()
+    {
         protected DBAccessAbstractProvider Provider { get; set; }
         public Table Table { get; private set; }
         public Where(Table table, DBAccessAbstractProvider provider) {

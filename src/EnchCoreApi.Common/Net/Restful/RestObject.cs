@@ -1,6 +1,8 @@
-﻿namespace EnchCoreApi.Common.Net.Restful {
+﻿namespace EnchCoreApi.Common.Net.Restful
+{
     [Serializable]
-    public class RestObject : Dictionary<string, object> {
+    public class RestObject : Dictionary<string, object>
+    {
         public string Status {
             get { return this["status"] as string; }
             set { this["status"] = value; }

@@ -1,7 +1,9 @@
 ﻿using System.CodeDom.Compiler;
 
-namespace EnchCoreApi.Common.CSharp {
-    public class CSharpAssemblyBuilder : CSharpFileBuilder {
+namespace EnchCoreApi.Common.CSharp
+{
+    public class CSharpAssemblyBuilder : CSharpFileBuilder
+    {
         public CSharpClassBuilder[] Classes { get; set; }
         public CSharpAssemblyBuilder(string sourceDir, params CSharpClassBuilder[] classes) : base(sourceDir) {
             Classes = classes;

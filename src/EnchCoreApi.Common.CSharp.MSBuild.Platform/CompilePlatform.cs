@@ -2,9 +2,11 @@
 using Microsoft.Build.Locator;
 using System.Reflection;
 
-namespace EnchCoreApi.Common.CSharp.MSBuild.Platform {
+namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
+{
     //[Export("StdCompilePlatform", typeof(ICompilePlatform))]
-    public class CompilePlatform : ICompilePlatform {
+    public class CompilePlatform : ICompilePlatform
+    {
         public CompilePlatform(bool initcsc = false) {
             if (initcsc) {
                 var dire = Directory.GetCurrentDirectory();

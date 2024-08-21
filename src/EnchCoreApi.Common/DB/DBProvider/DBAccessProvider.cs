@@ -1,7 +1,9 @@
 ﻿using System.Data;
 
-namespace EnchCoreApi.Common.DB.DBProvider {
-    public abstract class DBAccessProvider<TDBConn> : DBAccessAbstractProvider where TDBConn : IDbConnection {
+namespace EnchCoreApi.Common.DB.DBProvider
+{
+    public abstract class DBAccessProvider<TDBConn> : DBAccessAbstractProvider where TDBConn : IDbConnection
+    {
         public DBAccessProvider(TDBConn db) {
             DB = db;
         }

@@ -1,7 +1,9 @@
 ﻿using EnchCoreApi.Common.DB;
 
-namespace EnchCoreApi.Common.Logger {
-    public class CompositeLog : GenericLog, IDisposable {
+namespace EnchCoreApi.Common.Logger
+{
+    public class CompositeLog : GenericLog, IDisposable
+    {
         protected GenericLog GLog { get; set; }
         protected ConsoleLog CLog { get; set; }
         protected CompositeLog(string name, GenericLog gl) : base(name) {

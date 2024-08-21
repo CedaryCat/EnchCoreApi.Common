@@ -4,8 +4,10 @@ using System.Drawing;
 using System.Net;
 using System.Text;
 
-namespace EnchCoreApi.Common.Net.Http {
-    public static class HttpGet {
+namespace EnchCoreApi.Common.Net.Http
+{
+    public static class HttpGet
+    {
         static HttpGet() {
             ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;

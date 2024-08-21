@@ -3,7 +3,8 @@ using EnchCoreApi.Common.Dynamic;
 
 namespace EnchCoreApi.Common.DB.Core
 {
-    public class Column {
+    public class Column
+    {
         public string Name { get; set; }
         public bool Unique { get; set; }
         public bool Primary { get; set; }
@@ -54,7 +55,8 @@ namespace EnchCoreApi.Common.DB.Core
             dbField = dbAccess;
         }
     }
-    public enum ReflectInfo {
+    public enum ReflectInfo
+    {
         UnKnow,
         FieldInfo,
         PropertyInfo,

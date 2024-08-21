@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-namespace EnchCoreApi.Common.CSharp.MSBuild.Platform {
-    public class MSProject : Project {
+namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
+{
+    public class MSProject : Project
+    {
         private bool FromFile;
         public override IProjectProperties? Properties { get; protected set; }
         public override IProjectReferences? References { get; protected set; }
@@ -86,7 +88,8 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform {
         public override void Save() {
             Project.Save(ProjectFile.FullName);
         }
-        private class DefaultProperties : IProjectProperties {
+        private class DefaultProperties : IProjectProperties
+        {
             public string TargetFramework => "net6.0";
 
             public string? LangVersion => null;
@@ -95,7 +98,8 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform {
 
             public OutPutType OutPutType => OutPutType.Library;
         }
-        private class DefaultReferences : IProjectReferences {
+        private class DefaultReferences : IProjectReferences
+        {
             public IEnumerable<FileInfo> RefFiles { get; } = Array.Empty<FileInfo>();
         }
 

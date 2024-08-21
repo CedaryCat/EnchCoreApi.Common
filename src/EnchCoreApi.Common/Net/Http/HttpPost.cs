@@ -4,8 +4,10 @@ using System.Drawing;
 using System.Net;
 using System.Text;
 
-namespace EnchCoreApi.Common.Net.Http {
-    public static class HttpPost {
+namespace EnchCoreApi.Common.Net.Http
+{
+    public static class HttpPost
+    {
         public static Stream PostForStream(string url, Dictionary<string, string> content, HttpContentType type) {
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "POST";

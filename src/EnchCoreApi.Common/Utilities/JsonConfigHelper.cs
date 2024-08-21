@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 
-namespace EnchCoreApi.Common.Utilities {
-    public class JsonConfigHelper : ConfigHelper {
+namespace EnchCoreApi.Common.Utilities
+{
+    public class JsonConfigHelper : ConfigHelper
+    {
         public override T LoadFromFile<T>(string filePath) {
             if (!File.Exists(filePath))
                 return new T();

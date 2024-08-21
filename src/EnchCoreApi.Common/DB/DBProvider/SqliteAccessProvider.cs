@@ -3,19 +3,19 @@ using EnchCoreApi.Common.DB.DBVistor;
 using EnchCoreApi.Common.Utilities;
 using Microsoft.Data.Sqlite;
 using System.Data;
-using System.Linq;
 using System.Text;
 
 namespace EnchCoreApi.Common.DB.DBProvider
 {
-    public class SqliteAccessProvider : DBAccessProvider<SqliteConnection> {
+    public class SqliteAccessProvider : DBAccessProvider<SqliteConnection>
+    {
         public SqliteAccessProvider(SqliteConnection db) : base(db) {
             DB = db;
         }
 
-        private RandomHelper rand = new RandomHelper();
+        private readonly RandomHelper rand = new RandomHelper();
 
-        private new SqliteConnection DB;
+        private new readonly SqliteConnection DB;
         public sealed override IDBFieldAccessor DBFieldAccessor { get; } = new DefaultFieldAccessor();
 
         public sealed override IDbConnection Clone() => new SqliteConnection(DB.ConnectionString);
@@ -24,7 +24,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
             try {
                 using var db = (SqliteConnection)Clone();
                 db.Open();
-                using var com = db.CreateCommand(); 
+                using var com = db.CreateCommand();
                 com.CommandText = query;
                 return com.ExecuteNonQuery();
             }
@@ -49,7 +49,8 @@ namespace EnchCoreApi.Common.DB.DBProvider
             }
         }
 
-        private class SqliteReaderBackup : QueryReaderBackup {
+        private class SqliteReaderBackup : QueryReaderBackup
+        {
             private readonly SqliteConnection DB;
             private readonly string CommandText;
             private readonly IDBFieldAccessor FieldAccessor;
@@ -61,8 +62,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
 
             public sealed override QueryReader CreateReader() {
                 string query = "";
-                try
-                {
+                try {
                     var db = new SqliteConnection(DB.ConnectionString);
                     db.Open();
                     using var com = db.CreateCommand();
@@ -220,8 +220,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
                 throw new ArgumentException("No values supplied");
             var updateStatements = updates
             .Where(v => !v.Column.AutoIncrement)
-            .Select((update, index) =>
-            {
+            .Select((update, index) => {
                 return new {
                     Statement = $"{update.Column.Name} = @p{index + 1}",
                     Param = update.GetStatementParam()

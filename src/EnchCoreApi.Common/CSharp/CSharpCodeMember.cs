@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.CSharp {
-    public abstract class CSCMember {
+﻿namespace EnchCoreApi.Common.CSharp
+{
+    public abstract class CSCMember
+    {
         public CSCMember(string accessModifier, string modifier, string name) {
             AccessModifier = accessModifier;
             Modifier = modifier;
@@ -14,7 +16,8 @@
         public string[] Attribute { get; set; }
         public abstract string[] GetCode();
     }
-    public class CSCNestedClass : CSCMember {
+    public class CSCNestedClass : CSCMember
+    {
         public CSCNestedClass(string accessModifier, string modifier, string name, string? baseTypeName, params CSCMember[] members) : base(accessModifier, modifier, name) {
             Members = new List<CSCMember>(members);
             BaseTypeName = baseTypeName;
@@ -27,7 +30,7 @@
         private readonly string[]? TextContent;
         public string? BaseTypeName { get; set; }
 
-        private List<CSCMember> Members = new List<CSCMember>();
+        private readonly List<CSCMember> Members = new List<CSCMember>();
         public override string[] GetCode() {
             int i = 0;
             if (TextContent != null) {
@@ -67,7 +70,8 @@
         }
     }
 
-    public abstract class ValueMember : CSCMember {
+    public abstract class ValueMember : CSCMember
+    {
         public Type Type { get; set; }
         public ValueMember(string accessModifier, string modifier, Type type, string name) : base(accessModifier, modifier, name) {
             Type = type;
@@ -77,7 +81,8 @@
         }
     }
 
-    public class CSCField : ValueMember {
+    public class CSCField : ValueMember
+    {
         public CSCField(string accessModifier, string modifier, Type type, string name) : base(accessModifier, modifier, type, name) {
         }
         public CSCField(string accessModifier, string modifier, Type type, string name, params string[] attribute) : base(accessModifier, modifier, type, name, attribute) {
@@ -111,7 +116,8 @@
         }
     }
 
-    public class CSCProperty : ValueMember {
+    public class CSCProperty : ValueMember
+    {
         public CSCProperty(string accessModifier, string modifier, string name, Type type) : base(accessModifier, modifier, type, name) {
         }
         public CSCProperty(string accessModifier, string modifier, string name, Type type, params string[] attribute) : base(accessModifier, modifier, type, name, attribute) {
@@ -153,7 +159,8 @@
         }
     }
 
-    public class CSCMethod : ValueMember {
+    public class CSCMethod : ValueMember
+    {
         public CSCMethod(string accessModifier, string modifier, Type? type, string name, string parameters) : base(accessModifier, modifier, type, name) {
             Parameters = parameters;
         }

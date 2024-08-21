@@ -1,4 +1,6 @@
-﻿namespace EnchCoreApi.Common.DB.DBAttribute {
-    public class ColumnJsonStorageAttribute : Attribute {
+﻿namespace EnchCoreApi.Common.DB.DBAttribute
+{
+    public class ColumnJsonStorageAttribute : Attribute
+    {
     }
 }

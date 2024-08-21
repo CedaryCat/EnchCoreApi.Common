@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.CSharp.MSBuild {
-    public interface IProjectProperties : IProjectModule {
+﻿namespace EnchCoreApi.Common.CSharp.MSBuild
+{
+    public interface IProjectProperties : IProjectModule
+    {
         public string TargetFramework { get; }
         public string? LangVersion { get; }
         public Configuration Configuration { get; }
@@ -13,13 +15,15 @@
         public string? CscToolPath => null;
         public IEnumerable<KeyValuePair<string, string?>> OtherProperties => Array.Empty<KeyValuePair<string, string?>>();
     }
-    public enum OutPutType {
+    public enum OutPutType
+    {
         Library,
         Exe,
         Module,
         Winexe,
     }
-    public enum Configuration {
+    public enum Configuration
+    {
         Debug,
         Release,
     }

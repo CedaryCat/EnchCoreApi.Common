@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace EnchCoreApi.Common.Dynamic {
-    public class ValueAccessor {
+namespace EnchCoreApi.Common.Dynamic
+{
+    public class ValueAccessor
+    {
         private ValueAccessor(string name, Func<object, object> getter, Action<object, object> setter) {
             Name = name;
             Getter = getter;
@@ -49,7 +51,8 @@ namespace EnchCoreApi.Common.Dynamic {
             return CreateAccessor((FieldInfo)PropOrField);
         }
     }
-    public class ValueAccessor<TMember> {
+    public class ValueAccessor<TMember>
+    {
         private ValueAccessor(string name, Func<object, TMember> getter, Action<object, TMember> setter) {
             Name = name;
             Getter = getter;
@@ -90,7 +93,8 @@ namespace EnchCoreApi.Common.Dynamic {
             return CreateAccessor((FieldInfo)PropOrField);
         }
     }
-    public class ValueAccessor<TInstance, TMember> {
+    public class ValueAccessor<TInstance, TMember>
+    {
         private ValueAccessor(string name, Func<TInstance, TMember> getter, Action<TInstance, TMember> setter) {
             Name = name;
             Getter = getter;

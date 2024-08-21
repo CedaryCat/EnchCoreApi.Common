@@ -8,7 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using HttpListener = HttpServer.HttpListener;
 
-namespace EnchCoreApi.Common.Net.Restful {
+namespace EnchCoreApi.Common.Net.Restful
+{
     /// <summary>
     /// Rest command delegate
     /// </summary>
@@ -19,15 +20,16 @@ namespace EnchCoreApi.Common.Net.Restful {
     /// <summary>
     /// A RESTful API service
     /// </summary>
-    public class Rest : IDisposable {
+    public class Rest : IDisposable
+    {
         private readonly List<RestCommand> commands = new List<RestCommand>();
         /// <summary>
         /// Contains redirect URIs. The key is the base URI. The first item of the tuple is the redirect URI.
         /// The second item of the tuple is an optional "upgrade" URI which will be added to the REST response.
         /// </summary>
-        private Dictionary<string, Tuple<string, string>> redirects = new Dictionary<string, Tuple<string, string>>();
+        private readonly Dictionary<string, Tuple<string, string>> redirects = new Dictionary<string, Tuple<string, string>>();
         private HttpListener listener;
-        private StringHeader serverHeader;
+        private readonly StringHeader serverHeader;
         private Timer tokenBucketTimer;
         private GenericLog Log;
         public Dictionary<string, TokenInfoBase> Tokens = new Dictionary<string, TokenInfoBase>();

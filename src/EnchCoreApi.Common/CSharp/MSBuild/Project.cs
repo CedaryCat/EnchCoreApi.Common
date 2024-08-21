@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 
-namespace EnchCoreApi.Common.CSharp.MSBuild {
-    public abstract class Project : IProjectLoader<IProjectProperties>, IProjectLoader<IProjectReferences> {
+namespace EnchCoreApi.Common.CSharp.MSBuild
+{
+    public abstract class Project : IProjectLoader<IProjectProperties>, IProjectLoader<IProjectReferences>
+    {
         public string ProjectFilePath { get; private set; }
         public FileInfo ProjectFile { get; private set; }
         public abstract IProjectProperties? Properties { get; protected set; }

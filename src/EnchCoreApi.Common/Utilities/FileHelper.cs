@@ -1,7 +1,9 @@
 ﻿using System.Text;
 
-namespace EnchCoreApi.Common.Utilities {
-    public static class FileHelper {
+namespace EnchCoreApi.Common.Utilities
+{
+    public static class FileHelper
+    {
         public static Encoding GetFileTextEncoding(string fileName) {
             FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             Encoding r = GetFileTextEncoding(fs);

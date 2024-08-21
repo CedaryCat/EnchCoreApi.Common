@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
 
-namespace EnchCoreApi.Common.Dynamic {
+namespace EnchCoreApi.Common.Dynamic
+{
     //public abstract class ExpOp
     //{
     //    pub abstract Expression Exp { get;}
@@ -13,8 +14,9 @@ namespace EnchCoreApi.Common.Dynamic {
     //    }
     //}
 
-    public class Exps<TExp> : IEnumerable<TExp> where TExp : Expression {
-        private IEnumerable<TExp>[] exps;
+    public class Exps<TExp> : IEnumerable<TExp> where TExp : Expression
+    {
+        private readonly IEnumerable<TExp>[] exps;
         public Exps(params IEnumerable<TExp>[] exps) {
             this.exps = exps;
         }
@@ -32,7 +34,8 @@ namespace EnchCoreApi.Common.Dynamic {
         }
     }
 
-    public class ExpOp<TExp> where TExp : Expression {
+    public class ExpOp<TExp> where TExp : Expression
+    {
         public TExp expression;
 
         //protected override Expression Exp { get => expression;}

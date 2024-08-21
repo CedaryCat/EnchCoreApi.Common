@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 
-namespace EnchCoreApi.Common {
+namespace EnchCoreApi.Common
+{
 
-    public class RandomEnumerable<T> : IEnumerable<T>, IEnumerator<T> {
+    public class RandomEnumerable<T> : IEnumerable<T>, IEnumerator<T>
+    {
         private readonly T[] _items;
         private readonly bool[] _taked;
         private readonly Random _random;

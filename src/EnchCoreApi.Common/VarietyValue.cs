@@ -1,15 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace EnchCoreApi.Common {
-    public struct VarietyValue : IEquatable<int>, IEquatable<float>, IEquatable<double>, IEquatable<Vector2>, IEquatable<bool> {
-        private enum ValueType {
+namespace EnchCoreApi.Common
+{
+    public struct VarietyValue : IEquatable<int>, IEquatable<float>, IEquatable<double>, IEquatable<Vector2>, IEquatable<bool>
+    {
+        private enum ValueType
+        {
             num,
             vector
         }
         public static VarietyValue Zero = new VarietyValue(0);
-        private double Value;
+        private readonly double Value;
         private Vector2 Vector2;
-        private ValueType type;
+        private readonly ValueType type;
         public VarietyValue(bool value) {
             Value = value.GetHashCode();
             Vector2 = Vector2.Zero;

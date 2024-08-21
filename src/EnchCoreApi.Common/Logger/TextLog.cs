@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.Logger {
-    public class TextLog : GenericLog, IDisposable {
+﻿namespace EnchCoreApi.Common.Logger
+{
+    public class TextLog : GenericLog, IDisposable
+    {
         protected StreamWriter _logWriter;
         public string FileName { get; set; }
 

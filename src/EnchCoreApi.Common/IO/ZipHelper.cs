@@ -1,7 +1,9 @@
 ﻿using System.IO.Compression;
 
-namespace EnchCoreApi.Common.IO {
-    public static class ZipHelper {
+namespace EnchCoreApi.Common.IO
+{
+    public static class ZipHelper
+    {
         /// <summary>
         /// 对目录下所有次级文件压缩为一个zip，并保存在给给定路径下。
         /// </summary>

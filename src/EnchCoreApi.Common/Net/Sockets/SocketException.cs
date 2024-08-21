@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.Net.Sockets {
-    public class ServerException : Exception {
+﻿namespace EnchCoreApi.Common.Net.Sockets
+{
+    public class ServerException : Exception
+    {
         public Exception SourceException { get; set; }
         public bool ExceptionOnStart { get; set; }
         public bool ExceptionOnListen { get; set; }
@@ -20,7 +22,8 @@
                 SourceException;
         }
     }
-    public class ClientException : Exception {
+    public class ClientException : Exception
+    {
         public Exception SourceException { get; set; }
         public bool ExceptionOnInitialize { get; set; }
         public bool ExceptionOnStart { get; set; }
@@ -39,7 +42,8 @@
                 SourceException;
         }
     }
-    public class SocketNotInitilizedException : Exception {
+    public class SocketNotInitilizedException : Exception
+    {
 
     }
 }

@@ -5,7 +5,8 @@ using System.Data;
 
 namespace EnchCoreApi.Common.DB.Core
 {
-    public class DBValue<T> : Value {
+    public class DBValue<T> : Value
+    {
         private readonly IDBFieldAccessor access;
         private readonly T? value;
         public override Column Column { get; protected set; }
@@ -72,11 +73,12 @@ namespace EnchCoreApi.Common.DB.Core
             return GetTypedValue();
         }
     }
-    public class DBValue : Value {
+    public class DBValue : Value
+    {
         public override Column Column { get; protected set; }
         private readonly Value typedValue;
-        private static Dictionary<Type, Func<object[], object>> constructs_reader = new Dictionary<Type, Func<object[], object>>();
-        private static Dictionary<Type, Func<object[], object>> constructs_value = new Dictionary<Type, Func<object[], object>>();
+        private static readonly Dictionary<Type, Func<object[], object>> constructs_reader = new Dictionary<Type, Func<object[], object>>();
+        private static readonly Dictionary<Type, Func<object[], object>> constructs_value = new Dictionary<Type, Func<object[], object>>();
         private Type GeniType { get; set; }
         private static void InitConstruct<TGeni>() {
             InitConstruct(typeof(TGeni));

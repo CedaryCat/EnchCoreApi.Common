@@ -1,7 +1,9 @@
 ﻿using EnchCoreApi.Common.Compiler;
 
-namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler {
-    public class CompilerClient {
+namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler
+{
+    public class CompilerClient
+    {
         private CompileResult? CompileResult;
         public CompileResult Run(string cscpath, CompileParameter parameter) {
             var csc = new ConsoleAppManager(cscpath, false);
@@ -44,6 +46,6 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform.Compiler {
             }
         }
 
-        bool hasError = false;
+        private bool hasError = false;
     }
 }

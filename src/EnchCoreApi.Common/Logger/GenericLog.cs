@@ -1,5 +1,7 @@
-﻿namespace EnchCoreApi.Common.Logger {
-    public abstract class GenericLog : ILog {
+﻿namespace EnchCoreApi.Common.Logger
+{
+    public abstract class GenericLog : ILog
+    {
         public GenericLog(string name) {
             Name = name;
         }
@@ -32,7 +34,7 @@
         public virtual void ConsoleLog(string log) {
             ConsoleLog(log, LogFlag.Normal);
         }
-        private object obj = new object();
+        private readonly object obj = new object();
         private void ConsoleLog(string log, LogFlag flag) {
             lock (obj) {
                 if (CanLog) {
@@ -41,7 +43,8 @@
             }
         }
     }
-    public enum LogFlag {
+    public enum LogFlag
+    {
         Normal,
         Info,
         Success,

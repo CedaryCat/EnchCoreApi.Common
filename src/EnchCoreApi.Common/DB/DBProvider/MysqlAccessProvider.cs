@@ -1,4 +1,5 @@
-﻿namespace EnchCoreApi.Common.DB.DBProvider {
+﻿namespace EnchCoreApi.Common.DB.DBProvider
+{
     //public class MysqlAccessProvider : DBAccessProvider<MySqlConnection>
     //{
     //    public MysqlAccessProvider(MySqlConnection db) : base(db)
