@@ -1,6 +1,9 @@
-﻿namespace EnchCoreApi.Common
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+namespace EnchCoreApi.Common
 {
-    public class AccessSecureDict<TKey, TValue> : IDictionary<TKey, TValue> where TKey : notnull where TValue : struct
+    public class AccessSecureDict<TKey, TValue> : IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue> where TKey : notnull where TValue : struct
     {
         private readonly Dictionary<TKey, TValue> _dict;
 
@@ -27,6 +30,7 @@
             _dict = new Dictionary<TKey, TValue>();
             _getDefaultValue2 = getDefaultValue;
         }
+        TValue IReadOnlyDictionary<TKey, TValue>.this[TKey key] => this[key];
         /// <summary>
         /// when get: if the key does not exist in the dictionary,the defaultVaule is returned.
         /// when set: if the key does not exist in the dictionary,the key-value pair is added
@@ -54,8 +58,10 @@
         }
 
         public ICollection<TKey> Keys => _dict.Keys;
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => _dict.Keys;
 
         public ICollection<TValue> Values => _dict.Values;
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => _dict.Values;
 
         public int Count => _dict.Count;
 
@@ -132,7 +138,7 @@
         }
     }
 
-    public class AccessSecureRefDict<TKey, TValue> : IDictionary<TKey, TValue> where TKey : notnull where TValue : class
+    public class AccessSecureRefDict<TKey, TValue> : IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue> where TKey : notnull where TValue : class
     {
         private readonly Dictionary<TKey, TValue> _dict;
 
@@ -159,6 +165,7 @@
             _dict = new Dictionary<TKey, TValue>();
             _getDefaultValue2 = getDefaultValue;
         }
+        TValue IReadOnlyDictionary<TKey, TValue>.this[TKey key] => this[key];
         /// <summary>
         /// when get: if the key does not exist in the dictionary,the defaultVaule is returned.
         /// when set: if the key does not exist in the dictionary,the key-value pair is added
@@ -186,8 +193,10 @@
         }
 
         public ICollection<TKey> Keys => _dict.Keys;
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => _dict.Keys;
 
         public ICollection<TValue> Values => _dict.Values;
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => _dict.Values;
 
         public int Count => _dict.Count;
 
