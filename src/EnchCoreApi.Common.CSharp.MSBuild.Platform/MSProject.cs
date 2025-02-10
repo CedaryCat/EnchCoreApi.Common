@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.Versioning;
 
 namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
 {
@@ -88,9 +89,52 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
         public override void Save() {
             Project.Save(ProjectFile.FullName);
         }
+        static class CurrentTargetFramework
+        {
+            public readonly static string TargetFramework =
+        #if NET9_0
+                "net9.0";
+        #elif NET8_0_OR_GREATER
+                "net8.0";
+        #elif NET7_0_OR_GREATER
+                "net7.0";
+        #elif NET6_0_OR_GREATER
+                "net6.0";
+        #elif NET5_0_OR_GREATER
+                "net5.0";
+        #elif NETCOREAPP3_1_OR_GREATER
+                "netcoreapp3.1";
+        #elif NETCOREAPP3_0_OR_GREATER
+                "netcoreapp3.0";
+        #elif NETCOREAPP2_1_OR_GREATER
+                "netcoreapp2.1";
+        #elif NETCOREAPP2_0_OR_GREATER
+                "netcoreapp2.0";
+        #elif NETCOREAPP1_1_OR_GREATER
+                "netcoreapp1.1";
+        #elif NETCOREAPP1_0_OR_GREATER
+                "netcoreapp1.0";
+        #elif NETSTANDARD2_1_OR_GREATER
+                "netstandard2.1";
+        #elif NETSTANDARD2_0_OR_GREATER
+                "netstandard2.0";
+        #elif NETSTANDARD1_3_OR_GREATER
+                "netstandard1.3";
+        #elif NETSTANDARD1_2_OR_GREATER
+                "netstandard1.2";
+        #elif NETSTANDARD1_1_OR_GREATER
+                "netstandard1.1";
+        #elif NETSTANDARD1_0_OR_GREATER
+                "netstandard1.0";
+        #elif NETFX_CORE
+                "netfx";
+        #else
+                "net";
+        #endif
+        }
         private class DefaultProperties : IProjectProperties
         {
-            public string TargetFramework => "net6.0";
+            public string TargetFramework => CurrentTargetFramework.TargetFramework;
 
             public string? LangVersion => null;
 
