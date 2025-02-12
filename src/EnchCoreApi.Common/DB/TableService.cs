@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace EnchCoreApi.Common.DB
 {
-    public class TableService<RowType> where RowType : new()
+    public class TableService<RowType> where RowType : notnull, new()
     {
         protected DBAccessAbstractProvider Provider { get; set; }
         public Table Table { get; protected set; }
@@ -19,9 +19,9 @@ namespace EnchCoreApi.Common.DB
             var typeInfo = type.GetTypeInfo();
 
             var onlyColumn = type.GetCustomAttribute<ColumnOnlyAttribute>() != null;
-            var columnList = new List<Column>();
+            var columnList = new List<TableColumn>();
 
-            static Column ColumnSetting(Column column, MemberInfo member) {
+            static TableColumn ColumnSetting(TableColumn column, MemberInfo member) {
                 column.Unique = member.GetCustomAttribute<ColumnUniqueAttribute>() is not null;
                 column.Primary = member.GetCustomAttribute<ColumnPrimaryAttribute>() is not null;
                 column.NotNull = member.GetCustomAttribute<ColumnNotNullAttribute>() is not null;
@@ -42,7 +42,7 @@ namespace EnchCoreApi.Common.DB
                     continue;
                 if (onlyColumn && prop.GetCustomAttribute<ColumnIgnoreAttribute>() is null)
                     continue;
-                columnList.Add(ColumnSetting(new Column(prop.GetCustomAttribute<ColumnNameAttribute>()?.Name ?? prop.Name, i++, prop.PropertyType, ValueAccessor.CreateAccessor(prop), provider.DBFieldAccessor), prop));
+                columnList.Add(ColumnSetting(new TableColumn(prop.GetCustomAttribute<ColumnNameAttribute>()?.Name ?? prop.Name, i++, prop.PropertyType, ValueAccessor.CreateAccessor(prop), provider.DBFieldAccessor), prop));
             }
             var fields = typeInfo.GetRuntimeFields();
             foreach (var field in fields) {
@@ -52,7 +52,7 @@ namespace EnchCoreApi.Common.DB
                     continue;
                 if (onlyColumn && field.GetCustomAttribute<ColumnIgnoreAttribute>() is null)
                     continue;
-                columnList.Add(ColumnSetting(new Column(field.GetCustomAttribute<ColumnNameAttribute>()?.Name ?? field.Name, i++, field.FieldType, ValueAccessor.CreateAccessor(field), provider.DBFieldAccessor), field));
+                columnList.Add(ColumnSetting(new TableColumn(field.GetCustomAttribute<ColumnNameAttribute>()?.Name ?? field.Name, i++, field.FieldType, ValueAccessor.CreateAccessor(field), provider.DBFieldAccessor), field));
             }
             Table table = new Table(tableName, columnList);
             return new TableService<RowType>(provider, table);

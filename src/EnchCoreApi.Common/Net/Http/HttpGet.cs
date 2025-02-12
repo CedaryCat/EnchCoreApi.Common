@@ -8,72 +8,63 @@ namespace EnchCoreApi.Common.Net.Http
 {
     public static class HttpGet
     {
-        static HttpGet() {
-            ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+
+        private static async Task<HttpResponseMessage> GetResponseAsync(string url) {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            return await client.GetAsync(url);
         }
-        public static JObject GetJObject(string url) {
-            return JsonConvert.DeserializeObject<JObject>(GetString(url));
+
+        public static async Task<JObject> GetJObjectAsync(string url) {
+            return JsonConvert.DeserializeObject<JObject>(await GetStringAsync(url)) ?? new();
         }
-        public static Stream GetStream(string url) {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            return response.GetResponseStream();
+
+        public static async Task<Stream> GetStreamAsync(string url) {
+            var response = await GetResponseAsync(url);
+            return await response.Content.ReadAsStreamAsync();
         }
-        public static BinaryReader GetBinaryReader(string url) {
-            return new BinaryReader(GetStream(url));
+
+        public static async Task<BinaryReader> GetBinaryReaderAsync(string url) {
+            return new BinaryReader(await GetStreamAsync(url));
         }
-        public static StreamReader GetStreamReader(string url) {
-            return new StreamReader(GetStream(url), Encoding.UTF8);
+
+        public static async Task<StreamReader> GetStreamReaderAsync(string url) {
+            return new StreamReader(await GetStreamAsync(url), Encoding.UTF8);
         }
-        public static string GetString(string url) {
-            using var reader = GetStreamReader(url);
-            return reader.ReadToEnd();
+
+        public static async Task<string> GetStringAsync(string url) {
+            using var reader = await GetStreamReaderAsync(url);
+            return await reader.ReadToEndAsync();
         }
-        public static Image GetImage(string url) {
-            //return Image.FromStream(GetStream(url));
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            using var stream = response.GetResponseStream();
-            return Image.FromStream(stream);
-        }
-        public static bool GetFile(string url, string path, string name, bool coverFile = true) {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-            Directory.CreateDirectory(path);
-            if (coverFile) {
-                if (File.Exists(path + name))
-                    File.Delete(path + name);
-                if (File.Exists(path + name + ".downloading"))
-                    File.Delete(path + name + ".downloading");
+
+        public static async Task<bool> GetFileAsync(string url, string directory, string name, bool coverFile = true) {
+            var path = Path.Combine(directory, name);
+            var tempPath = path + ".downloading";
+
+            if (!coverFile && (File.Exists(path) || File.Exists(tempPath))) {
+                return false;
             }
-            else {
-                if (File.Exists(path + name) || File.Exists(path + name + ".downloading"))
-                    return false;
-            }
+
+            Directory.CreateDirectory(directory);
+
             try {
-                using (var responseStream = response.GetResponseStream()) {
-                    using (var fileStream = File.Create(path + name + ".downloading")) {
-                        byte[] buffer = new byte[1024 * 10];
-                        int size = responseStream.Read(buffer, 0, buffer.Length);
-                        while (size > 0) {
-                            fileStream.Write(buffer, 0, size);
-                            size = responseStream.Read(buffer, 0, buffer.Length);
-                        }
+                using (var responseStream = await GetStreamAsync(url))
+                using (var fileStream = File.Create(tempPath)) {
+                    byte[] buffer = new byte[1024 * 10];
+                    int size;
+                    while ((size = await responseStream.ReadAsync(buffer, 0, buffer.Length)) > 0) {
+                        await fileStream.WriteAsync(buffer, 0, size);
                     }
                 }
-                var file = new FileInfo(path + name + ".downloading");
-                file.MoveTo(path + name);
+
+                if (File.Exists(path)) File.Delete(path);
+                File.Move(tempPath, path);
                 return true;
             }
             catch {
+                if (File.Exists(tempPath)) File.Delete(tempPath);
                 return false;
-            }
-            finally {
-
             }
         }
     }

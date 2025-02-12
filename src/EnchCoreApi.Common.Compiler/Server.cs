@@ -7,6 +7,11 @@ namespace EnchCoreApi.Common.Compiler
     public class Server : CompilerServer
     {
         public override bool Build(out string projectName, out string output, out CompilerError[] errors) {
+
+            if (Project is null || CompileLogger is null) {
+                throw new Exception("LoadProject must be called before Build");
+            }
+
             projectName = Project.ProjectFile.Name;
             output = Project.OutPutPath;
             var res = Project.Build(CompileLogger);
@@ -36,7 +41,7 @@ namespace EnchCoreApi.Common.Compiler
             CompileLogger = platform.CreateCompileLogger(loggerDir);
         }
 
-        private Project Project;
-        private CompileLogger CompileLogger;
+        private Project? Project;
+        private CompileLogger? CompileLogger;
     }
 }

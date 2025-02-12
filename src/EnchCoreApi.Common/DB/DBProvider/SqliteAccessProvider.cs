@@ -1,8 +1,10 @@
 ﻿using EnchCoreApi.Common.DB.Core;
 using EnchCoreApi.Common.DB.DBVistor;
+using EnchCoreApi.Common.Dynamic;
 using EnchCoreApi.Common.Utilities;
 using Microsoft.Data.Sqlite;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace EnchCoreApi.Common.DB.DBProvider
@@ -106,22 +108,25 @@ namespace EnchCoreApi.Common.DB.DBProvider
         }
 
         public sealed override string[] QueryAllTable() {
-            List<string> list = new List<string>();
+            List<string> list = [];
             using var reader = QueryReader($"SELECT name FROM sqlite_Master");
             while (reader.Read()) {
                 list.Add(reader.Get<string>(new Column("name", null, typeof(string), DBFieldAccessor)));
             }
             return list.ToArray();
         }
-
-        public sealed override bool QueryTable(string tableName, out Table table) {
-            List<Column> columns = new List<Column>();
+        public sealed override bool QueryTable(string tableName, [NotNullWhen(true)] out TableInfo? table) {
+            List<Column> columns = [];
             using var reader = QueryReader($"PRAGMA table_info({tableName})");
             while (reader.Read()) {
-                columns.Add(new Column(reader.Reader.GetString(reader.Reader.GetOrdinal("name")), reader.Reader.GetInt32(reader.Reader.GetOrdinal("cid")), reader.Reader.GetFieldType(reader.Reader.GetOrdinal("dflt_value")), DBFieldAccessor));
+                columns.Add(new Column(
+                    reader.Reader.GetString(reader.Reader.GetOrdinal("name")),
+                    reader.Reader.GetInt32(reader.Reader.GetOrdinal("cid")), 
+                    reader.Reader.GetFieldType(reader.Reader.GetOrdinal("dflt_value")),
+                    DBFieldAccessor));
             }
             if (columns.Count > 0) {
-                table = new Table(tableName, columns);
+                table = new TableInfo(tableName, columns);
                 return true;
             }
             table = null;
@@ -169,9 +174,10 @@ namespace EnchCoreApi.Common.DB.DBProvider
         }
 
         public sealed override bool EnsureTableStructure(Table table) {
-            if (QueryTable(table.Name, out var old)) {
+            if (QueryTable(table.Name, out var oldTable)) {
+                var old = oldTable.TableColumns;
                 if (!table.All(c => old.Select(c => c.Name).Contains(c.Name)) || !old.Select(o => o.Name).All(c => table.Any(c2 => c2.Name == c))) {
-                    AlterTableStruct(old, table);
+                    AlterTableStruct(oldTable, table);
                     return true;
                 }
             }
@@ -181,7 +187,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
             return false;
         }
 
-        public sealed override bool AlterTableStruct(Table tableFrom, Table tableTo) {
+        public sealed override bool AlterTableStruct(TableInfo tableFrom, Table tableTo) {
             if (!QueryAllTable().Contains(tableFrom.Name)) {
                 return false;
             }
@@ -189,7 +195,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
                 string tmpTable = $"{tableFrom.Name}_{rand.NextString(20)}";
                 RenameTable(tableFrom.Name, tmpTable);
                 CreateTable(tableTo);
-                var columns = string.Join(", ", tableFrom.Where(c => tableTo.Any(c2 => c2.Name == c.Name)).Select(c => $"'{c.Name}'"));
+                var columns = string.Join(", ", tableFrom.TableColumns.Where(c => tableTo.Any(c2 => c2.Name == c.Name)).Select(c => $"'{c.Name}'"));
                 Query($"INSERT INTO {tableFrom.Name} ({columns}) SELECT {columns} FROM {tmpTable}");
                 DropTable(tmpTable);
                 return true;
@@ -207,7 +213,6 @@ namespace EnchCoreApi.Common.DB.DBProvider
         public sealed override int InsertRow(Table table, params Value[] values) {
             var sbnames = new StringBuilder();
             var sbvalues = new StringBuilder();
-            int count = 0;
             ICollection<object?> _params = new List<object?>();
             foreach (var value in values) {
                 _params.Add(value.Column.AutoIncrement ? null : value.GetStatementParam());

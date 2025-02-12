@@ -35,11 +35,11 @@ namespace EnchCoreApi.Common.Net.Sockets
         public void DeInitialize() {
             Initialized = false;
             IsStop = true;
-            IPE = null;
+            IPE = null!;
             socket?.Dispose();
-            socket = null;
+            socket = null!;
             netStream?.Dispose();
-            netStream = null;
+            netStream = null!;
         }
         /// <summary>
         /// 
@@ -142,7 +142,7 @@ namespace EnchCoreApi.Common.Net.Sockets
         }
 
         private void SendCallback(IAsyncResult result) {
-            Tuple<ClientAsyncSendCallback, object> tuple = (Tuple<ClientAsyncSendCallback, object>)result.AsyncState;
+            Tuple<ClientAsyncSendCallback, object?> tuple = (Tuple<ClientAsyncSendCallback, object?>)result.AsyncState!;
             try {
                 EnsureNetStreamCanWrite();
                 netStream.EndWrite(result);
@@ -159,14 +159,14 @@ namespace EnchCoreApi.Common.Net.Sockets
             }
         }
 
-        public void AsyncSend(byte[] data, int offset, int size, ClientAsyncSendCallback callback, object state = null) {
+        public void AsyncSend(byte[] data, int offset, int size, ClientAsyncSendCallback callback, object? state = null) {
             try {
                 if (!this.Connected || IsStop || !Initialized) {
                     return;
                 }
                 else {
                     EnsureNetStreamCanWrite();
-                    netStream.BeginWrite(data, offset, size, SendCallback, new Tuple<ClientAsyncSendCallback, object>(callback, state));
+                    netStream.BeginWrite(data, offset, size, SendCallback, new Tuple<ClientAsyncSendCallback, object?>(callback, state));
                 }
             }
             catch (Exception ex) {
@@ -190,9 +190,9 @@ namespace EnchCoreApi.Common.Net.Sockets
             }
         }
 
-        public event ClientGetData GetData;
-        public event ClientLostConnection LostConnection;
-        public event ClientGetException GetException;
+        public event ClientGetData? GetData;
+        public event ClientLostConnection? LostConnection;
+        public event ClientGetException? GetException;
         /// <summary>
         /// 指示是否释放所占资源，如NetStream,TcpClient
         /// </summary>

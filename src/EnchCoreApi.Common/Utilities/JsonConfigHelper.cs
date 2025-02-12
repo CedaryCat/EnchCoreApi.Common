@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace EnchCoreApi.Common.Utilities
@@ -8,14 +9,14 @@ namespace EnchCoreApi.Common.Utilities
         public override T LoadFromFile<T>(string filePath) {
             if (!File.Exists(filePath))
                 return new T();
-            return JsonConvert.DeserializeObject<T>(FileHelper.ReadFileTextInCorrectEncoding(filePath));
+            return JsonConvert.DeserializeObject<T>(FileHelper.ReadFileTextInCorrectEncoding(filePath))!;
         }
 
-        public override bool LoadFromFile<T>(string filePath, out T config) {
-            config = null;
+        public override bool LoadFromFile<T>(string filePath, [NotNullWhen(true)] out T config) {
+            config = null!;
             if (!File.Exists(filePath))
                 return false;
-            config = JsonConvert.DeserializeObject<T>(FileHelper.ReadFileTextInCorrectEncoding(filePath));
+            config = JsonConvert.DeserializeObject<T>(FileHelper.ReadFileTextInCorrectEncoding(filePath))!;
             return true;
         }
 

@@ -132,14 +132,14 @@ namespace EnchCoreApi.Common.Net.Sockets
             GetData?.Invoke(this, client, buffer, offset, length);
         }
 
-        private void Client_LostConnection(RemoteClient client, bool isException, Exception ex = null) {
+        private void Client_LostConnection(RemoteClient client, bool isException, Exception? ex = null) {
             Clients.Remove(client.IPE);
             LostConnection?.Invoke(this, client, isException, ex);
             client.Dispose();
         }
 
         private void Client_GetException(RemoteClient client, Exception ex) {
-            GetException.Invoke(this, new ServerException() {
+            GetException?.Invoke(this, new ServerException() {
                 SourceException = ex,
                 IsRemoteClientException = true,
             });
@@ -155,9 +155,9 @@ namespace EnchCoreApi.Common.Net.Sockets
             GetException = null;
             LostConnection = null;
         }
-        public event ServerGetConnection GetConnection;
-        public event ServerGetData GetData;
-        public event ServerLostConnection LostConnection;
-        public event ServerGetException GetException;
+        public event ServerGetConnection? GetConnection;
+        public event ServerGetData? GetData;
+        public event ServerLostConnection? LostConnection;
+        public event ServerGetException? GetException;
     }
 }

@@ -15,7 +15,7 @@
             return false;
         }
         public static TokenInfoBase None => new TokenInfoBase("None", "");
-        public override bool Equals(object obj) {
+        public override bool Equals(object? obj) {
             if (obj is TokenInfoBase) {
                 var token = (TokenInfoBase)obj;
                 return token.GetHashCode() == this.GetHashCode();

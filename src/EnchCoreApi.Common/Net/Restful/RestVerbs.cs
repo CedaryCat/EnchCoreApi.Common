@@ -8,24 +8,21 @@
         /// </summary>
         /// <param name="key">the key</param>
         /// <returns>Returns null if key does not exist.</returns>
-        public new string this[string key] {
+        public new string? this[string key] {
             get {
-                string ret;
-                if (TryGetValue(key, out ret))
+                if (TryGetValue(key, out var ret))
                     return ret;
                 return null;
             }
             set {
-                if (!ContainsKey(key)) {
-                    if (value == null)
-                        return;
-                    Add(key, value);
+                if (value == null) {
+                    Remove(key);
+                    return;
                 }
                 else {
-                    if (value != null)
+                    if (!TryAdd(key, value)) {
                         base[key] = value;
-                    else
-                        Remove(key);
+                    }
                 }
             }
         }

@@ -144,25 +144,29 @@ namespace EnchCoreApi.Common
 
         private readonly Func<TValue>? _getDefaultValue;
 
-        private readonly Func<TKey, TValue>? _getDefaultValue2;
+        private readonly Func<TKey, TValue> _getDefaultValue2;
         public AccessSecureRefDict(TValue defValue) {
-            _dict = new Dictionary<TKey, TValue>();
-            _getDefaultValue = delegate { return defValue; };
+            _dict = [];
+            _getDefaultValue = () => defValue;
+            _getDefaultValue2 = _ => defValue;
         }
         public AccessSecureRefDict(IDictionary<TKey, TValue> dictionary, TValue defValue) {
             _dict = new Dictionary<TKey, TValue>(dictionary);
-            _getDefaultValue = delegate { return defValue; };
+            _getDefaultValue = () => defValue;
+            _getDefaultValue2 = _ => defValue;
         }
         public AccessSecureRefDict(IDictionary<TKey, TValue> dictionary, Func<TValue> getDefaultValue) {
             _dict = new Dictionary<TKey, TValue>(dictionary);
             _getDefaultValue = getDefaultValue;
+            _getDefaultValue2 = _ => getDefaultValue();
         }
         public AccessSecureRefDict(Func<TValue> getDefaultValue) {
-            _dict = new Dictionary<TKey, TValue>();
+            _dict = [];
             _getDefaultValue = getDefaultValue;
+            _getDefaultValue2 = _ => getDefaultValue();
         }
         public AccessSecureRefDict(Func<TKey, TValue> getDefaultValue) {
-            _dict = new Dictionary<TKey, TValue>();
+            _dict = [];
             _getDefaultValue2 = getDefaultValue;
         }
         TValue IReadOnlyDictionary<TKey, TValue>.this[TKey key] => this[key];
@@ -177,8 +181,12 @@ namespace EnchCoreApi.Common
                 if (_dict.TryGetValue(key, out var value)) {
                     return value;
                 }
-                if (_getDefaultValue != null) value = _getDefaultValue.Invoke();
-                if (_getDefaultValue2 != null) value = _getDefaultValue2.Invoke(key);
+                if (_getDefaultValue is not null) {
+                    value = _getDefaultValue.Invoke();
+                }
+                else {
+                    value = _getDefaultValue2.Invoke(key); 
+                }
                 _dict.Add(key, value);
                 return value;
             }
@@ -264,7 +272,7 @@ namespace EnchCoreApi.Common
             return _dict.Remove(item.Key);
         }
 
-        public bool TryGetValue(TKey key, out TValue value) {
+        public bool TryGetValue(TKey key, [NotNullWhen(true)] out TValue? value) {
             return _dict.TryGetValue(key, out value);
         }
 

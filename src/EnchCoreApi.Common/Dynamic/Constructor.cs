@@ -4,9 +4,9 @@ namespace EnchCoreApi.Common.Dynamic
 {
     public class Constructor
     {
-        public Func<object[], object> Creator;
+        public Func<object?[], object> Creator;
         public Func<object> NoParamsCreator;
-        private Constructor(Func<object[], object> func) {
+        private Constructor(Func<object?[], object> func) {
             Creator = func;
         }
         private Constructor(Func<object> func) {
@@ -14,9 +14,9 @@ namespace EnchCoreApi.Common.Dynamic
         }
         public static Constructor Create(Type objType) {
             if (objType.IsValueType) {
-                return new Constructor(() => default);
+                return new Constructor(Expression.Lambda<Func<object>>(Expression.Default(objType)).Compile());
             }
-            var finalExp = Expression.New(objType.GetConstructor(new Type[] { }));
+            var finalExp = Expression.New(objType.GetConstructor([]) ?? throw new Exception("No default constructor"));
             var exp = Expression.Lambda<Func<object>>(finalExp);
             return new Constructor(exp.Compile());
         }
@@ -32,8 +32,10 @@ namespace EnchCoreApi.Common.Dynamic
                     innerArgs[i] = Expression.TypeAs(Expression.ArrayIndex(arrArg, Expression.Constant(i)), paramType[i]);
                 }
             }
-            var finalExp = Expression.New(objType.GetConstructor(paramType), innerArgs);
-            var exp = Expression.Lambda<Func<object[], object>>(finalExp, arrArg);
+            var finalExp = Expression.New(
+                objType.GetConstructor(paramType) ?? throw new Exception("No constructor with these parameters"), 
+                innerArgs);
+            var exp = Expression.Lambda<Func<object?[], object>>(finalExp, arrArg);
             return new Constructor(exp.Compile());
         }
         public T GetInstance<T>(params object[] args) {
@@ -65,16 +67,18 @@ namespace EnchCoreApi.Common.Dynamic
                     innerArgs[i] = Expression.TypeAs(Expression.ArrayIndex(arrArg, Expression.Constant(i)), paramType[i]);
                 }
             }
-            var finalExp = Expression.New(typeof(Tobj).GetConstructor(paramType), innerArgs);
+            var finalExp = Expression.New(
+                typeof(Tobj).GetConstructor(paramType) ?? throw new Exception("No constructor with these parameters"),
+                innerArgs);
             var exp = Expression.Lambda<Func<object[], Tobj>>(finalExp, arrArg);
             return new Constructor<Tobj>(exp.Compile());
         }
         public static Constructor<Tobj> Create() {
             var type = typeof(Tobj);
             if (type.IsValueType) {
-                return new Constructor<Tobj>(() => default);
+                return new Constructor<Tobj>(() => default!);
             }
-            var ctor = type.GetConstructor(new Type[] { });
+            var ctor = type.GetConstructor([]);
             if (ctor == null) {
                 throw new Exception($"{typeof(Tobj).Name} have not a default ctor");
             }
@@ -106,7 +110,9 @@ namespace EnchCoreApi.Common.Dynamic
                 args[i] = genArgs[i];
                 _params[i] = Expression.Parameter(args[i]);
             }
-            var finalExp = Expression.New(genArgs[genArgs.Length - 1].GetConstructor(args), _params);
+            var finalExp = Expression.New(
+                genArgs[genArgs.Length - 1].GetConstructor(args) ?? throw new Exception("No constructor with these parameters"),
+                _params);
             var exp = Expression.Lambda<TFunc>(finalExp, _params);
             return new ConstructorFunc<TFunc>(exp.Compile());
         }

@@ -159,14 +159,18 @@
         }
     }
 
-    public class CSCMethod : ValueMember
+    public class CSCMethod : CSCMember
     {
-        public CSCMethod(string accessModifier, string modifier, Type? type, string name, string parameters) : base(accessModifier, modifier, type, name) {
+        public CSCMethod(string accessModifier, string modifier, Type? type, string name, string parameters) : base(accessModifier, modifier, name) {
             Parameters = parameters;
+            ReturnType = type;
         }
-        public CSCMethod(string accessModifier, string modifier, Type? type, string name, string parameters, params string[] attribute) : base(accessModifier, modifier, type, name, attribute) {
+        public CSCMethod(string accessModifier, string modifier, Type? type, string name, string parameters, params string[] attribute) : base(accessModifier, modifier, name, attribute) {
             Parameters = parameters;
+            ReturnType = type;
         }
+
+        public Type? ReturnType { get; set; }
         public string Parameters { get; set; }
         public string[] MethodContent { get; set; }
         public override string[] GetCode() {
@@ -178,7 +182,7 @@
                 }
             }
             if (MethodContent is not null) {
-                result[i++] = $"{(AccessModifier is null ? "" : $"{AccessModifier} ")}{(Modifier is null ? "" : $"{Modifier} ")}{(Type is null ? "void" : Type.FullName)} {Name} ({Parameters ?? ""})";
+                result[i++] = $"{(AccessModifier is null ? "" : $"{AccessModifier} ")}{(Modifier is null ? "" : $"{Modifier} ")}{(ReturnType is null ? "void" : ReturnType.FullName)} {Name} ({Parameters ?? ""})";
                 result[i++] = "{";
                 foreach (var v in MethodContent) {
                     result[i++] = "    " + v;
@@ -186,7 +190,7 @@
                 result[i++] = "}";
             }
             else {
-                result[i++] = $"{(AccessModifier is null ? "" : $"{AccessModifier} ")}{(Modifier is null ? "" : $"{Modifier} ")}{(Type is null ? "void" : Type.FullName)} {Name} ({Parameters ?? ""}) " + "{ }";
+                result[i++] = $"{(AccessModifier is null ? "" : $"{AccessModifier} ")}{(Modifier is null ? "" : $"{Modifier} ")}{(ReturnType is null ? "void" : ReturnType.FullName)} {Name} ({Parameters ?? ""}) " + "{ }";
             }
             return result;
         }

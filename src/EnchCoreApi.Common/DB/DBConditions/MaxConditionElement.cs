@@ -2,13 +2,13 @@
 
 namespace EnchCoreApi.Common.DB.DBConditions
 {
-    public class MaxConditionElement<RowType> : IConditionElement where RowType : new()
+    public class MaxConditionElement<RowType> : IConditionElement where RowType : notnull, new()
     {
         public Column Column { get; protected set; }
         public Table Table { get; protected set; }
-        public IWhere<RowType> Scope { get; protected set; }
+        public IWhere<RowType>? Scope { get; protected set; }
 
-        public MaxConditionElement(Column column, Table table, IWhere<RowType> scope = null) {
+        public MaxConditionElement(Column column, Table table, IWhere<RowType>? scope = null) {
             Column = column;
             Table = table;
             Scope = scope;

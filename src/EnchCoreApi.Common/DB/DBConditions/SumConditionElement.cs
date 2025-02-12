@@ -2,13 +2,13 @@
 
 namespace EnchCoreApi.Common.DB.DBConditions
 {
-    public class SumConditionElement<RowType> : IConditionElement where RowType : new()
+    public class SumConditionElement<RowType> : IConditionElement where RowType : notnull, new()
     {
         public Column Column { get; protected set; }
         public Table Table { get; protected set; }
-        public IWhere<RowType> Scope { get; protected set; }
+        public IWhere<RowType>? Scope { get; protected set; }
 
-        public SumConditionElement(Column column, Table table, IWhere<RowType> sumScope = null) {
+        public SumConditionElement(Column column, Table table, IWhere<RowType>? sumScope = null) {
             Column = column;
             Table = table;
             Scope = sumScope;

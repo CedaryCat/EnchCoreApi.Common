@@ -2,7 +2,7 @@
 
 namespace EnchCoreApi.Common.DB.DBConditions
 {
-    public class AvgConditionElement<RowType> : IConditionElement where RowType : new()
+    public class AvgConditionElement<RowType> : IConditionElement where RowType : notnull, new()
     {
         public Column Column { get; protected set; }
         public Table Table { get; protected set; }

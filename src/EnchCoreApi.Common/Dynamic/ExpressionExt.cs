@@ -34,15 +34,10 @@ namespace EnchCoreApi.Common.Dynamic
         }
     }
 
-    public class ExpOp<TExp> where TExp : Expression
+    public class ExpOp<TExp>(TExp p) where TExp : Expression
     {
-        public TExp expression;
+        public TExp expression = p;
 
-        //protected override Expression Exp { get => expression;}
-
-        public ExpOp(TExp p) {
-            expression = p;
-        }
         public static implicit operator ExpOp<TExp>(TExp from) => new ExpOp<TExp>(from);
         public static implicit operator TExp(ExpOp<TExp> from) => from.expression;
         public static ExpOp<BinaryExpression> operator >(ExpOp<TExp> left, Expression right) {
@@ -157,5 +152,10 @@ namespace EnchCoreApi.Common.Dynamic
                 return Expression.ArrayAccess(this, indexs);
             }
         }
+
+        public override bool Equals(object? obj) 
+            => ReferenceEquals(this, obj);
+        public override int GetHashCode() 
+            => base.GetHashCode();
     }
 }

@@ -4,16 +4,16 @@ using System.Text;
 
 namespace EnchCoreApi.Common.DB.Core
 {
-    public class WhereTermiNode<RowType> : Where<RowType>, IWhere<RowType> where RowType : new()
+    public class WhereTermiNode<RowType> : Where<RowType>, IWhere<RowType> where RowType : notnull, new()
     {
         public bool IsEmpty => Leaf.Count == 0;
         public List<IConditionElement> Leaf { get; private set; } = new List<IConditionElement>();
         protected virtual Func<Value, EqualConditionElement> EqualCondition => (value) => new EqualConditionElement(value);
         protected virtual Func<Column, Value[], InConditionElement> InCondition => (c, values) => new InConditionElement(c, values);
-        protected virtual Func<Column, Table, IWhere<RowType>, MaxConditionElement<RowType>> MaxCondition => (c, t, s) => new MaxConditionElement<RowType>(c, t, s);
-        protected virtual Func<Column, Table, IWhere<RowType>, MinConditionElement<RowType>> MinCondition => (c, t, s) => new MinConditionElement<RowType>(c, t, s);
-        protected virtual Func<Column, Table, IWhere<RowType>, AvgConditionElement<RowType>> AvgCondition => (c, t, s) => new AvgConditionElement<RowType>(c, t, s);
-        protected virtual Func<Column, Table, IWhere<RowType>, SumConditionElement<RowType>> SumCondition => (c, t, s) => new SumConditionElement<RowType>(c, t, s);
+        protected virtual Func<Column, Table, IWhere<RowType>?, MaxConditionElement<RowType>> MaxCondition => (c, t, s) => new MaxConditionElement<RowType>(c, t, s);
+        protected virtual Func<Column, Table, IWhere<RowType>?, MinConditionElement<RowType>> MinCondition => (c, t, s) => new MinConditionElement<RowType>(c, t, s);
+        protected virtual Func<Column, Table, IWhere<RowType>?, AvgConditionElement<RowType>> AvgCondition => (c, t, s) => new AvgConditionElement<RowType>(c, t, s);
+        protected virtual Func<Column, Table, IWhere<RowType>?, SumConditionElement<RowType>> SumCondition => (c, t, s) => new SumConditionElement<RowType>(c, t, s);
         protected virtual Func<Table, WhereInteriNode<RowType>> WhereInteriNode => (t) => new WhereInteriNode<RowType>(t, Provider);
 
         public WhereTermiNode(Table table, DBAccessAbstractProvider provider) : base(table, provider) {
@@ -126,22 +126,22 @@ namespace EnchCoreApi.Common.DB.Core
             return this;
         }
 
-        public WhereTermiNode<RowType> AndEqualToMax(string column, IWhere<RowType> scope = null) {
+        public WhereTermiNode<RowType> AndEqualToMax(string column, IWhere<RowType>? scope = null) {
             Leaf.Add(MaxCondition(Table[column], Table, scope));
             return this;
         }
 
-        public WhereTermiNode<RowType> AndEqualToMin(string column, IWhere<RowType> scope = null) {
+        public WhereTermiNode<RowType> AndEqualToMin(string column, IWhere<RowType>? scope = null) {
             Leaf.Add(MinCondition(Table[column], Table, scope));
             return this;
         }
 
-        public WhereTermiNode<RowType> AndEqualToAvg(string column, IWhere<RowType> scope = null) {
+        public WhereTermiNode<RowType> AndEqualToAvg(string column, IWhere<RowType>? scope = null) {
             Leaf.Add(MaxCondition(Table[column], Table, scope));
             return this;
         }
 
-        public WhereTermiNode<RowType> AndEqualToSum(string column, IWhere<RowType> scope = null) {
+        public WhereTermiNode<RowType> AndEqualToSum(string column, IWhere<RowType>? scope = null) {
             Leaf.Add(MinCondition(Table[column], Table, scope));
             return this;
         }
@@ -198,19 +198,19 @@ namespace EnchCoreApi.Common.DB.Core
             return WhereInteriNode(Table).OrWhere(this).OrWhere(new WhereTermiNode<RowType>(Table, Provider).AndWhereIn(column, values));
         }
 
-        public WhereInteriNode<RowType> OrEqualToMax(string column, IWhere<RowType> scope) {
+        public WhereInteriNode<RowType> OrEqualToMax(string column, IWhere<RowType>? scope) {
             return WhereInteriNode(Table).OrWhere(this).OrWhere(new WhereTermiNode<RowType>(Table, Provider).AndEqualToMax(column));
         }
 
-        public WhereInteriNode<RowType> OrEqualToMin(string column, IWhere<RowType> scope) {
+        public WhereInteriNode<RowType> OrEqualToMin(string column, IWhere<RowType>? scope) {
             return WhereInteriNode(Table).OrWhere(this).OrWhere(new WhereTermiNode<RowType>(Table, Provider).AndEqualToMin(column));
         }
 
-        public WhereInteriNode<RowType> OrEqualToAvg(string column, IWhere<RowType> scope) {
+        public WhereInteriNode<RowType> OrEqualToAvg(string column, IWhere<RowType>? scope) {
             return WhereInteriNode(Table).OrWhere(this).OrWhere(new WhereTermiNode<RowType>(Table, Provider).AndEqualToAvg(column));
         }
 
-        public WhereInteriNode<RowType> OrEqualToSum(string column, IWhere<RowType> scope) {
+        public WhereInteriNode<RowType> OrEqualToSum(string column, IWhere<RowType>? scope) {
             return WhereInteriNode(Table).OrWhere(this).OrWhere(new WhereTermiNode<RowType>(Table, Provider).AndEqualToSum(column));
         }
 
@@ -306,19 +306,19 @@ namespace EnchCoreApi.Common.DB.Core
             return AndWhereIn(column, values);
         }
 
-        IWhere<RowType> IWhere<RowType>.AndEqualToMax(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.AndEqualToMax(string column, IWhere<RowType>? scope) {
             return AndEqualToMax(column, scope);
         }
 
-        IWhere<RowType> IWhere<RowType>.AndEqualToMin(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.AndEqualToMin(string column, IWhere<RowType>? scope) {
             return AndEqualToMin(column, scope);
         }
 
-        IWhere<RowType> IWhere<RowType>.AndEqualToAvg(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.AndEqualToAvg(string column, IWhere<RowType>? scope) {
             return AndEqualToAvg(column, scope);
         }
 
-        IWhere<RowType> IWhere<RowType>.AndEqualToSum(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.AndEqualToSum(string column, IWhere<RowType>? scope) {
             return AndEqualToSum(column, scope);
         }
 
@@ -326,19 +326,19 @@ namespace EnchCoreApi.Common.DB.Core
             return OrWhereIn(column, values);
         }
 
-        IWhere<RowType> IWhere<RowType>.OrEqualToMax(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.OrEqualToMax(string column, IWhere<RowType>? scope) {
             return OrEqualToMax(column, scope);
         }
 
-        IWhere<RowType> IWhere<RowType>.OrEqualToMin(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.OrEqualToMin(string column, IWhere<RowType>? scope) {
             return OrEqualToMin(column, scope);
         }
 
-        IWhere<RowType> IWhere<RowType>.OrEqualToAvg(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.OrEqualToAvg(string column, IWhere<RowType>? scope) {
             return OrEqualToAvg(column, scope);
         }
 
-        IWhere<RowType> IWhere<RowType>.OrEqualToSum(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.OrEqualToSum(string column, IWhere<RowType>? scope) {
             return OrEqualToSum(column, scope);
         }
         #endregion

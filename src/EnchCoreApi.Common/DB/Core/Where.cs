@@ -2,7 +2,7 @@
 
 namespace EnchCoreApi.Common.DB.Core
 {
-    public abstract class Where<RowType> : IWhere<RowType> where RowType : new()
+    public abstract class Where<RowType> : IWhere<RowType> where RowType : notnull, new()
     {
         protected DBAccessAbstractProvider Provider { get; set; }
         public Table Table { get; private set; }
@@ -228,19 +228,19 @@ namespace EnchCoreApi.Common.DB.Core
             throw new NotImplementedException();
         }
 
-        IWhere<RowType> IWhere<RowType>.AndEqualToMax(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.AndEqualToMax(string column, IWhere<RowType>? scope) {
             throw new NotImplementedException();
         }
 
-        IWhere<RowType> IWhere<RowType>.AndEqualToMin(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.AndEqualToMin(string column, IWhere<RowType>? scope) {
             throw new NotImplementedException();
         }
 
-        IWhere<RowType> IWhere<RowType>.AndEqualToAvg(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.AndEqualToAvg(string column, IWhere<RowType>? scope) {
             throw new NotImplementedException();
         }
 
-        IWhere<RowType> IWhere<RowType>.AndEqualToSum(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.AndEqualToSum(string column, IWhere<RowType>? scope) {
             throw new NotImplementedException();
         }
 
@@ -248,19 +248,19 @@ namespace EnchCoreApi.Common.DB.Core
             throw new NotImplementedException();
         }
 
-        IWhere<RowType> IWhere<RowType>.OrEqualToMax(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.OrEqualToMax(string column, IWhere<RowType>? scope) {
             throw new NotImplementedException();
         }
 
-        IWhere<RowType> IWhere<RowType>.OrEqualToMin(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.OrEqualToMin(string column, IWhere<RowType>? scope) {
             throw new NotImplementedException();
         }
 
-        IWhere<RowType> IWhere<RowType>.OrEqualToAvg(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.OrEqualToAvg(string column, IWhere<RowType>? scope) {
             throw new NotImplementedException();
         }
 
-        IWhere<RowType> IWhere<RowType>.OrEqualToSum(string column, IWhere<RowType> scope) {
+        IWhere<RowType> IWhere<RowType>.OrEqualToSum(string column, IWhere<RowType>? scope) {
             throw new NotImplementedException();
         }
         #endregion

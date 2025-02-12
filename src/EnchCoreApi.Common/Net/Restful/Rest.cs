@@ -22,21 +22,21 @@ namespace EnchCoreApi.Common.Net.Restful
     /// </summary>
     public class Rest : IDisposable
     {
-        private readonly List<RestCommand> commands = new List<RestCommand>();
+        private readonly List<RestCommand> commands = [];
         /// <summary>
         /// Contains redirect URIs. The key is the base URI. The first item of the tuple is the redirect URI.
         /// The second item of the tuple is an optional "upgrade" URI which will be added to the REST response.
         /// </summary>
-        private readonly Dictionary<string, Tuple<string, string>> redirects = new Dictionary<string, Tuple<string, string>>();
-        private HttpListener listener;
+        private readonly Dictionary<string, Tuple<string, string?>> redirects = [];
+        private HttpListener? listener;
         private readonly StringHeader serverHeader;
         private Timer tokenBucketTimer;
         private GenericLog Log;
-        public Dictionary<string, TokenInfoBase> Tokens = new Dictionary<string, TokenInfoBase>();
+        public Dictionary<string, TokenInfoBase> Tokens = [];
         /// <summary>
         /// Contains tokens used to manage REST authentication
         /// </summary>
-        public Dictionary<string, int> tokenBucket = new Dictionary<string, int>();
+        public Dictionary<string, int> tokenBucket = [];
         /// <summary>
         /// <see cref="IPAddress"/> the REST service is listening on
         /// </summary>
@@ -95,7 +95,7 @@ namespace EnchCoreApi.Common.Net.Restful
         /// Stops the RESTful API service
         /// </summary>
         public virtual void Stop() {
-            listener.Stop();
+            listener?.Stop();
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace EnchCoreApi.Common.Net.Restful
         /// <param name="targetRoute">The target URI to redirect to from the base URI</param>
         /// <param name="upgradeRoute">The upgrade route that will be added as an object to the <see cref="RestObject"/> response of the target route</param>
         /// <param name="parameterized">Whether the route uses parameterized querying or not.</param>
-        public void RegisterRedirect(string baseRoute, string targetRoute, string upgradeRoute = null, bool parameterized = true) {
+        public void RegisterRedirect(string baseRoute, string targetRoute, string? upgradeRoute = null, bool parameterized = true) {
             if (redirects.ContainsKey(baseRoute)) {
                 redirects.Add(baseRoute, Tuple.Create(targetRoute, upgradeRoute));
             }
@@ -157,7 +157,7 @@ namespace EnchCoreApi.Common.Net.Restful
         /// </summary>
         /// <param name="sender">Sender of the request</param>
         /// <param name="e">RequestEventArgs received</param>
-        protected virtual void OnRequest(object sender, RequestEventArgs e) {
+        protected virtual void OnRequest(object? sender, RequestEventArgs e) {
             var obj = ProcessRequest(sender, e);
             if (obj == null)
                 throw new NullReferenceException("obj");
@@ -181,11 +181,11 @@ namespace EnchCoreApi.Common.Net.Restful
         /// <param name="sender">Sender of the request</param>
         /// <param name="e">RequestEventArgs received</param>
         /// <returns>A <see cref="RestObject"/> describing the state of the request</returns>
-        protected virtual object ProcessRequest(object sender, RequestEventArgs e) {
+        protected virtual object ProcessRequest(object? sender, RequestEventArgs e) {
             try {
                 var uri = e.Request.Uri.AbsolutePath;
                 uri = uri.TrimEnd('/');
-                string upgrade = null;
+                string? upgrade = null;
 
                 if (redirects.ContainsKey(uri)) {
                     upgrade = redirects[uri].Item2;
@@ -210,9 +210,9 @@ namespace EnchCoreApi.Common.Net.Restful
 
                     var obj = ExecuteCommand(cmd, verbs, e.Request.Parameters, e.Request, e.Context);
                     if (obj != null) {
-                        if (!string.IsNullOrWhiteSpace(upgrade) && obj is RestObject) {
-                            if (!(obj as RestObject).ContainsKey("upgrade")) {
-                                (obj as RestObject).Add("upgrade", upgrade);
+                        if (!string.IsNullOrWhiteSpace(upgrade) && obj is RestObject restObj) {
+                            if (!restObj.ContainsKey("upgrade")) {
+                                restObj.Add("upgrade", upgrade);
                             }
                         }
 
@@ -278,8 +278,7 @@ namespace EnchCoreApi.Common.Net.Restful
         ) {
             StringBuilder requestBuilder = new StringBuilder(cmd.UriTemplate);
             char separator = '?';
-            foreach (IParameter paramImpl in parms) {
-                Parameter param = (paramImpl as Parameter);
+            foreach (var param in parms.OfType<Parameter>()) {
                 if (param == null || (!includeToken && param.Name.Equals("token", StringComparison.InvariantCultureIgnoreCase)))
                     continue;
 

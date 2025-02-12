@@ -3,7 +3,7 @@ using EnchCoreApi.Common.Dynamic;
 
 namespace EnchCoreApi.Common.DB.Core
 {
-    public class Row<RowType> : IDisposable where RowType : new()
+    public class Row<RowType> : IDisposable where RowType : notnull, new()
     {
         public Table Table { get; private set; }
         private readonly QueryReader QueryReader;
@@ -31,9 +31,9 @@ namespace EnchCoreApi.Common.DB.Core
             return v;
         }
         public RowType Parse(bool dispose = true) {
-            var result = func();
+            var result = func.Invoke();
             foreach (var column in Table) {
-                column.Setter(result, (new DBValue(QueryReader.Reader, column, QueryReader.FieldAccessor, column.RealType)).GetValue());
+                column.Setter(result, new DBValue(QueryReader.Reader, column, QueryReader.FieldAccessor, column.RealType).GetValue());
             }
             if (dispose && CanDispose)
                 Dispose();

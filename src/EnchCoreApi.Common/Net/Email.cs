@@ -21,7 +21,7 @@ namespace EnchCoreApi.Common.Net
         /// <param name="mailTitle">发送邮件标题</param>
         /// <param name="mailContent">发送邮件内容</param>
         /// <returns></returns>
-        public virtual bool SendEmail(string mailTo, string mailTitle, string mailContent, out Exception ex) {
+        public virtual bool SendEmail(string mailTo, string mailTitle, string mailContent, out Exception? ex) {
             ex = null;
             //邮件服务设置
             SmtpClient smtpClient = new SmtpClient();

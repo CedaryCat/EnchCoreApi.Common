@@ -8,7 +8,7 @@ namespace EnchCoreApi.Common.DB.Core
     public class DBValue<T> : Value
     {
         private readonly IDBFieldAccessor access;
-        private readonly T? value;
+        private readonly T value;
         public override Column Column { get; protected set; }
         public DBValue(Column column, IDBFieldAccessor access, T value) {
             this.value = value;
@@ -27,12 +27,9 @@ namespace EnchCoreApi.Common.DB.Core
                 this.value = tv.DeserializeFromTextContent(access.Get<string>(reader, Column.Ordinal ?? reader.GetOrdinal(Column.Name)));
             }
             else if (Column.JsonStorage) {
-                this.value = JsonConvert.DeserializeObject<T>(access.Get<string>(reader, Column.Ordinal ?? reader.GetOrdinal(Column.Name)));
+                this.value = JsonConvert.DeserializeObject<T>(access.Get<string>(reader, Column.Ordinal ?? reader.GetOrdinal(Column.Name)))!;
             }
             else {
-                //object[] arr = new object[10];
-                //reader.GetValues(arr);
-                //var obj=reader.GetTypedValue(0);
                 this.value = access.Get<T>(reader, Column.Ordinal ?? reader.GetOrdinal(Column.Name));
             }
         }
@@ -65,7 +62,7 @@ namespace EnchCoreApi.Common.DB.Core
             return value;
         }
 
-        public T? GetTypedValue() {
+        public T GetTypedValue() {
             return value;
         }
 
@@ -77,8 +74,8 @@ namespace EnchCoreApi.Common.DB.Core
     {
         public override Column Column { get; protected set; }
         private readonly Value typedValue;
-        private static readonly Dictionary<Type, Func<object[], object>> constructs_reader = new Dictionary<Type, Func<object[], object>>();
-        private static readonly Dictionary<Type, Func<object[], object>> constructs_value = new Dictionary<Type, Func<object[], object>>();
+        private static readonly Dictionary<Type, Func<object?[], object>> constructs_reader = [];
+        private static readonly Dictionary<Type, Func<object?[], object>> constructs_value = [];
         private Type GeniType { get; set; }
         private static void InitConstruct<TGeni>() {
             InitConstruct(typeof(TGeni));
@@ -87,20 +84,16 @@ namespace EnchCoreApi.Common.DB.Core
             var tc = typeof(Column);
             var tr = typeof(IDataReader);
             var ta = typeof(IDBFieldAccessor);
-            if (!constructs_reader.ContainsKey(type)) {
-                constructs_reader.Add(type, Constructor.Create(typeof(DBValue<>).MakeGenericType(type), tc, ta, tr).Creator);
-            }
-            if (!constructs_value.ContainsKey(type)) {
-                constructs_value.Add(type, Constructor.Create(typeof(DBValue<>).MakeGenericType(type), tc, ta, type).Creator);
-            }
+            constructs_reader.TryAdd(type, Constructor.Create(typeof(DBValue<>).MakeGenericType(type), tc, ta, tr).Creator);
+            constructs_value.TryAdd(type, Constructor.Create(typeof(DBValue<>).MakeGenericType(type), tc, ta, type).Creator);
         }
-        private static object GetInstance(Column column, object value, IDBFieldAccessor access, Type genType) {
+        private static object GetInstance(Column column, object? value, IDBFieldAccessor access, Type genType) {
             if (constructs_value.TryGetValue(genType, out var func)) {
-                return func(new object[] { column, access, value });
+                return func([column, access, value]);
             }
             else {
                 InitConstruct(genType);
-                return constructs_value[genType](new object[] { column, access, value });
+                return constructs_value[genType]([column, access, value]);
             }
         }
         private static object GetInstance(Column column, IDataReader reader, IDBFieldAccessor access, Type genType) {
@@ -109,7 +102,7 @@ namespace EnchCoreApi.Common.DB.Core
             }
             else {
                 InitConstruct(genType);
-                return constructs_reader[genType](new object[] { column, access, reader });
+                return constructs_reader[genType]([column, access, reader]);
             }
         }
         static DBValue() {
@@ -124,7 +117,7 @@ namespace EnchCoreApi.Common.DB.Core
             InitConstruct<DateTime>();
             InitConstruct<bool>();
         }
-        public DBValue(Column column, object value, IDBFieldAccessor access, Type type) {
+        public DBValue(Column column, object? value, IDBFieldAccessor access, Type type) {
             Column = column;
             GeniType = type;
             typedValue = (Value)GetInstance(column, value, access, GeniType);

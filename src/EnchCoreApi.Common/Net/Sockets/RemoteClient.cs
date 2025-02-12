@@ -8,7 +8,7 @@ namespace EnchCoreApi.Common.Net.Sockets
         public RemoteClient(TcpClient connection, int bufferLen = 8 * 1024) {
             bufferLength = bufferLen;
             socket = connection;
-            IPE = (IPEndPoint)socket.Client.RemoteEndPoint;
+            IPE = (IPEndPoint)socket.Client.RemoteEndPoint!;
             netStream = new NetworkStream(socket.Client, false);
             SendBufferWriter = new BinaryWriter(new MemoryStream(SendBuffer));
         }
@@ -23,9 +23,7 @@ namespace EnchCoreApi.Common.Net.Sockets
         public void DeInitialize() {
             IsStop = true;
             socket?.Dispose();
-            socket = null;
             netStream?.Dispose();
-            netStream = null;
         }
         /// <summary>
         /// 开始读取
@@ -115,9 +113,9 @@ namespace EnchCoreApi.Common.Net.Sockets
             SendData(SendBuffer, 0, (int)SendBufferWriter.BaseStream.Position);
         }
 
-        public event RemoteClientGetData GetData;
-        public event RemoteClientGetException GetException;
-        public event RemoteClientLostConnection LostConnection;
+        public event RemoteClientGetData? GetData;
+        public event RemoteClientGetException? GetException;
+        public event RemoteClientLostConnection? LostConnection;
 
         /// <summary>
         /// 指示是否已释放所占资源，如NetStream,TcpClient

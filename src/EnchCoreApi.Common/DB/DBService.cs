@@ -14,10 +14,10 @@ namespace EnchCoreApi.Common.DB
         public static DBService CreateService<TDBConn>(DBAccessProvider<TDBConn> provider) where TDBConn : IDbConnection {
             return new DBService(provider);
         }
-        public TableService<RowType> CreateTableService<RowType>() where RowType : new() {
+        public TableService<RowType> CreateTableService<RowType>() where RowType : notnull, new() {
             return TableService<RowType>.CreateTableService(Provider);
         }
-        public TableService<RowType> CreateTableService<RowType>(string tableName) where RowType : new() {
+        public TableService<RowType> CreateTableService<RowType>(string tableName) where RowType : notnull, new() {
             return TableService<RowType>.CreateTableService(Provider, tableName);
         }
     }

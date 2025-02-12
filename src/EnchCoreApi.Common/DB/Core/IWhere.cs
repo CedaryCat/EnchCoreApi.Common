@@ -1,6 +1,6 @@
 ﻿namespace EnchCoreApi.Common.DB.Core
 {
-    public interface IWhere<RowType> where RowType : new()
+    public interface IWhere<RowType> where RowType : notnull, new()
     {
         public Table Table { get; }
         public bool IsEmpty { get; }
@@ -53,15 +53,15 @@
 
         #region Min,Max,Avg,Sum
         IWhere<RowType> AndWhereIn<T>(string column, params T[] values);
-        IWhere<RowType> AndEqualToMax(string column, IWhere<RowType> scope = null);
-        IWhere<RowType> AndEqualToMin(string column, IWhere<RowType> scope = null);
-        IWhere<RowType> AndEqualToAvg(string column, IWhere<RowType> scope = null);
-        IWhere<RowType> AndEqualToSum(string column, IWhere<RowType> scope = null);
+        IWhere<RowType> AndEqualToMax(string column, IWhere<RowType>? scope = null);
+        IWhere<RowType> AndEqualToMin(string column, IWhere<RowType>? scope = null);
+        IWhere<RowType> AndEqualToAvg(string column, IWhere<RowType>? scope = null);
+        IWhere<RowType> AndEqualToSum(string column, IWhere<RowType>? scope = null);
         IWhere<RowType> OrWhereIn<T>(string column, params T[] values);
-        IWhere<RowType> OrEqualToMax(string column, IWhere<RowType> scope = null);
-        IWhere<RowType> OrEqualToMin(string column, IWhere<RowType> scope = null);
-        IWhere<RowType> OrEqualToAvg(string column, IWhere<RowType> scope = null);
-        IWhere<RowType> OrEqualToSum(string column, IWhere<RowType> scope = null);
+        IWhere<RowType> OrEqualToMax(string column, IWhere<RowType>? scope = null);
+        IWhere<RowType> OrEqualToMin(string column, IWhere<RowType>? scope = null);
+        IWhere<RowType> OrEqualToAvg(string column, IWhere<RowType>? scope = null);
+        IWhere<RowType> OrEqualToSum(string column, IWhere<RowType>? scope = null);
         #endregion;
 
         int Delete();

@@ -2,6 +2,7 @@
 using EnchCoreApi.Common.DB.DBVistor;
 using System.Collections.Concurrent;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EnchCoreApi.Common.DB.DBProvider
 {
@@ -18,7 +19,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
-        public abstract WhereTermiNode<RowType> NewInitialWhere<RowType>(Table table) where RowType : new();
+        public abstract WhereTermiNode<RowType> NewInitialWhere<RowType>(Table table) where RowType : notnull, new();
         /// <summary>
         /// 
         /// </summary>
@@ -30,7 +31,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
         /// <param name="tableName"></param>
         /// <param name="table"></param>
         /// <returns></returns>
-        public abstract bool QueryTable(string tableName, out Table table);
+        public abstract bool QueryTable(string tableName, [NotNullWhen(true)] out TableInfo? table);
         /// <summary>
         /// 
         /// </summary>
@@ -61,13 +62,13 @@ namespace EnchCoreApi.Common.DB.DBProvider
         /// <param name="tableFrom"></param>
         /// <param name="tableTo"></param>
         /// <returns></returns>
-        public abstract bool AlterTableStruct(Table tableFrom, Table tableTo);
+        public abstract bool AlterTableStruct(TableInfo tableFrom, Table tableTo);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
-        public abstract int DeleteRow<RowType>(IWhere<RowType> where) where RowType : new();
+        public abstract int DeleteRow<RowType>(IWhere<RowType> where) where RowType : notnull, new();
         /// <summary>
         /// 
         /// </summary>
@@ -82,41 +83,41 @@ namespace EnchCoreApi.Common.DB.DBProvider
         /// <param name="where"></param>
         /// <param name="updates"></param>
         /// <returns></returns>
-        public abstract int UpdateRow<RowType>(IWhere<RowType> where, params Value[] updates) where RowType : new();
+        public abstract int UpdateRow<RowType>(IWhere<RowType> where, params Value[] updates) where RowType : notnull, new();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="where"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public abstract QueryReader SelectMax<RowType>(IWhere<RowType> where, Column column) where RowType : new();
+        public abstract QueryReader SelectMax<RowType>(IWhere<RowType> where, Column column) where RowType : notnull, new();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="where"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public abstract QueryReader SelectMin<RowType>(IWhere<RowType> where, Column column) where RowType : new();
+        public abstract QueryReader SelectMin<RowType>(IWhere<RowType> where, Column column) where RowType : notnull, new();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="where"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public abstract QueryReader SelectAverage<RowType>(IWhere<RowType> where, Column column) where RowType : new();
+        public abstract QueryReader SelectAverage<RowType>(IWhere<RowType> where, Column column) where RowType : notnull, new();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="where"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public abstract QueryReader SelectSum<RowType>(IWhere<RowType> where, Column column) where RowType : new();
+        public abstract QueryReader SelectSum<RowType>(IWhere<RowType> where, Column column) where RowType : notnull, new();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="where"></param>
         /// <returns></returns>
-        public abstract QueryReader SelectAll<RowType>(IWhere<RowType> where) where RowType : new();
+        public abstract QueryReader SelectAll<RowType>(IWhere<RowType> where) where RowType : notnull, new();
         public virtual void AppendAsyncAction(Action action) {
             tasks.Enqueue(action);
         }

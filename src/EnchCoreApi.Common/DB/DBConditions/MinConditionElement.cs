@@ -2,13 +2,13 @@
 
 namespace EnchCoreApi.Common.DB.DBConditions
 {
-    public class MinConditionElement<RowType> : IConditionElement where RowType : new()
+    public class MinConditionElement<RowType> : IConditionElement where RowType : notnull, new()
     {
         public Column Column { get; protected set; }
         public Table Table { get; protected set; }
-        public IWhere<RowType> Scope { get; protected set; }
+        public IWhere<RowType>? Scope { get; protected set; }
 
-        public MinConditionElement(Column column, Table table, IWhere<RowType> scope = null) {
+        public MinConditionElement(Column column, Table table, IWhere<RowType>? scope = null) {
             Column = column;
             Table = table;
             Scope = scope;

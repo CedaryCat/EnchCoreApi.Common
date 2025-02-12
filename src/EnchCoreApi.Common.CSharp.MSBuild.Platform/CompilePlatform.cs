@@ -12,8 +12,10 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
                 var dire = Directory.GetCurrentDirectory();
                 CSCDirectory = Path.Combine(dire, "Roslyn");
                 if (!Directory.Exists(CSCDirectory)) {
-                    using var source = typeof(CompilePlatform).Assembly.GetManifestResourceStream("EnchCoreApi.Common.CSharp.MSBuild.Platform.Roslyn.zip");
+                    var source = typeof(CompilePlatform).Assembly.GetManifestResourceStream("EnchCoreApi.Common.CSharp.MSBuild.Platform.Roslyn.zip") 
+                        ?? throw new Exception("Roslyn.zip not found");
                     ZipHelper.ExtractToDirectory(source, dire);
+                    source.Dispose();
                 }
             }
         }

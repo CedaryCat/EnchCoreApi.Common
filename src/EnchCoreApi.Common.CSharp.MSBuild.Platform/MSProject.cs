@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.Versioning;
 
@@ -16,13 +17,25 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
         public Microsoft.Build.Evaluation.Project Project { get; private set; }
         public string OutPutExtension {
             get {
+                var type = OutPutType.Library;
+
                 if (!FromFile) {
-                    return Properties.OutPutType == OutPutType.Library ? ".dll" : $".{Properties.OutPutType.ToString().ToLower()}";
+                    if (Properties is not null) {
+                        type = Properties.OutPutType;
+                    }
                 }
                 else {
-                    var type = Project.GetPropertyValue("OutPutType");
-                    return type.Length == 0 || type == "Library" ? ".dll" : $".{type.ToLower()}";
+                    if (Enum.TryParse<OutPutType>(Project.GetPropertyValue("OutputType"), out var t)) {
+                        type = t;
+                    }
                 }
+
+                return type switch {
+                    OutPutType.Exe => ".exe",
+                    OutPutType.Module => ".netmodule",
+                    OutPutType.Winexe => ".exe",
+                    _ => ".dll",
+                };
             }
         }
 
@@ -30,6 +43,11 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
             get {
                 var dir = ProjectFile.DirectoryName ?? throw new Exception();
                 if (!FromFile) {
+
+                    if (Properties is null) {
+                        throw new Exception("Properties must not be null if Project isn't load from file");
+                    }
+
                     if (Properties.OutDir != null && Properties.OutDir.Length > 0) {
                         return Path.Combine(dir, Properties.OutDir, ProjectFile.Name[..^ProjectFile.Extension.Length] + OutPutExtension);
                     }
@@ -50,6 +68,7 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
             }
         }
 
+        [MemberNotNull(nameof(Properties))]
         public override void Load(IProjectProperties properties) {
             Properties = properties;
 
@@ -73,6 +92,7 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
             Project = new Microsoft.Build.Evaluation.Project(ProjectFilePath);
         }
 
+        [MemberNotNull(nameof(References))]
         public override void Load(IProjectReferences references) {
             References = references;
             foreach (var file in References.RefFiles) {
@@ -149,18 +169,16 @@ namespace EnchCoreApi.Common.CSharp.MSBuild.Platform
 
         public override bool Build(CompileLogger logger) {
             if (!FromFile) {
-                if (Properties == null) {
+                if (Properties is null) {
                     Load(new DefaultProperties());
                 }
-                if (References == null) {
+                if (References is null) {
                     Load(new DefaultReferences());
                 }
             }
             Builded = false;
-            //if (!Debugger.IsAttached) {
-            //    Debugger.Launch();
-            //}
-            var objDir = Path.Combine(ProjectFile.DirectoryName, "obj");
+
+            var objDir = Path.Combine(ProjectFile.DirectoryName!, "obj");
             Directory.CreateDirectory(objDir);
             if (!File.Exists(Path.Combine(objDir, "project.assets.json"))) {
                 Process process = new Process();

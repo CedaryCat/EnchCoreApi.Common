@@ -40,13 +40,13 @@ namespace EnchCoreApi.Common.IO
         /// <param name="folder"></param>
         /// <param name="destination">目标流</param>
         /// <param name="onlySubFile">指示是否仅压缩路径下的次级文件</param>
-        public static void CreateFolderZip(DirectoryInfo folder, Stream destination, DirectoryInfo[] ignoreFolders) {
+        public static void CreateFolderZip(DirectoryInfo folder, Stream destination, DirectoryInfo[]? ignoreFolders = null) {
             using var archive = new ZipArchive(destination, ZipArchiveMode.Update);
             Recursion(folder, "", archive, ignoreFolders);
         }
-        private static void Recursion(DirectoryInfo folder, string folderpath, ZipArchive destination, DirectoryInfo[] ignoreFolders) {
+        private static void Recursion(DirectoryInfo folder, string folderpath, ZipArchive destination, DirectoryInfo[]? ignoreFolders = null) {
             foreach (var f in folder.GetDirectories()) {
-                if (ignoreFolders?.Any(i => i.FullName == f.FullName) ?? false) {
+                if (ignoreFolders is not null && ignoreFolders.Any(i => i.FullName == f.FullName)) {
                     continue;
                 }
                 Recursion(f, Path.Combine(folderpath, f.Name), destination, ignoreFolders);
@@ -149,7 +149,7 @@ namespace EnchCoreApi.Common.IO
             try {
                 using ZipArchive archive = new ZipArchive(source, ZipArchiveMode.Read);
                 foreach (var name in archive.Entries.Select(e => e.FullName)) {
-                    var entry = archive.GetEntry(name);
+                    var entry = archive.GetEntry(name) ?? throw new Exception("Unexpected entry");
                     using var sfs = entry.Open();
                     var path = Path.Combine(savePath, Path.Combine(name.Split('/')));
                     if (name.EndsWith('/')) {

@@ -50,16 +50,24 @@ namespace EnchCoreApi.Common.Dynamic
                 }
             }
             for (int i = 0; i < props.Length; i++) {
-                if (props[i].GetCustomAttribute<CopyIgnoreFieldAttribute>() is not null) {
+                var prop = props[i];
+                if (prop.GetCustomAttribute<CopyIgnoreFieldAttribute>() is not null) {
                     continue;
                 }
-                if (!props[i].CanRead || !props[i].CanWrite || !props[i].GetMethod.IsPublic || !props[i].SetMethod.IsPublic || props[i].GetMethod.IsStatic || props[i].SetMethod.IsStatic) {
+                if (!prop.CanRead || 
+                    !prop.CanWrite || 
+                    prop.GetMethod is null || 
+                    !prop.GetMethod.IsPublic || 
+                    prop.SetMethod is null || 
+                    !prop.SetMethod.IsPublic || 
+                    prop.GetMethod.IsStatic || 
+                    prop.SetMethod.IsStatic) {
                     continue;
                 }
-                var exp = Expression.Assign(Expression.Property(to, props[i]), Expression.Property(from, props[i]));
+                var exp = Expression.Assign(Expression.Property(to, prop), Expression.Property(from, prop));
                 propCopy.Add(exp);
                 allcopy.Add(exp);
-                if (!(props[i].GetCustomAttribute<CopyFieldAttribute>() is null)) {
+                if (prop.GetCustomAttribute<CopyFieldAttribute>() is not null) {
                     aoCopy.Add(exp);
                 }
             }
@@ -128,18 +136,19 @@ namespace EnchCoreApi.Common.Dynamic
             }
 
             for (int i = 0; i < fromprops.Length; i++) {
-                if (fromprops[i].GetCustomAttribute<CopyIgnoreFieldAttribute>() is not null)
+                var fromprop = fromprops[i];
+                if (fromprop.GetCustomAttribute<CopyIgnoreFieldAttribute>() is not null)
                     continue;
-                if (!fromprops[i].CanRead || !fromprops[i].GetMethod.IsPublic || !fromprops[i].SetMethod.IsPublic || fromprops[i].GetMethod.IsStatic)
+                if (!fromprop.CanRead || fromprop.GetMethod is null || !fromprop.GetMethod.IsPublic || fromprop.GetMethod.IsStatic)
                     continue;
-                var toprop = toType.GetProperty(fromprops[i].Name);
+                var toprop = toType.GetProperty(fromprop.Name);
                 if (toprop == null)
                     continue;
                 if (toprop.GetCustomAttribute<CopyIgnoreFieldAttribute>() is not null)
                     continue;
-                if (!toprop.CanWrite || !fromprops[i].GetMethod.IsPublic || !fromprops[i].SetMethod.IsPublic || fromprops[i].SetMethod.IsStatic)
+                if (!toprop.CanWrite || toprop.SetMethod is null || !toprop.SetMethod.IsPublic || toprop.SetMethod.IsStatic)
                     continue;
-                if (!toprop.PropertyType.IsAssignableFrom(fromprops[i].PropertyType))
+                if (!toprop.PropertyType.IsAssignableFrom(fromprop.PropertyType))
                     continue;
 
                 var exp = Expression.Assign(Expression.Property(to, toprop), Expression.Property(from, fromprops[i]));

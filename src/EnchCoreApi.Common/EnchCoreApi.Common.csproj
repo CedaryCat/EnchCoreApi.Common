@@ -5,10 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	  <LangVersion>11</LangVersion>
-	  <TieredPGO>true</TieredPGO>
-	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	  <Configurations>Debug;Release</Configurations>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	<Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
 	<PropertyGroup>
@@ -61,6 +59,10 @@
 	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Linq\" />
+	</ItemGroup>
+
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(Platform)'=='ForTerrariaPlugin_Debug|AnyCPU'">
 		<Exec Command="COPY $(TargetPath) C:\Users\25034\Desktop\1.4.4.9\TEST\bin&#xD;&#xA;COPY $(TargetDir)$(TargetName).deps.json C:\Users\25034\Desktop\1.4.4.9\TEST\ServerPlugins&#xD;&#xA;COPY $(TargetDir)$(TargetName).pdb C:\Users\25034\Desktop\1.4.4.9\TEST\bin" />
 	</Target>
@@ -68,5 +70,7 @@
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(Platform)'=='ForTerrariaPlugin_Release|AnyCPU'">
 		<Exec Command="COPY $(TargetPath) C:\Users\25034\Desktop\1.4.4.9\TEST\bin&#xD;&#xA;COPY $(TargetDir)$(TargetName).deps.json C:\Users\25034\Desktop\1.4.4.9\TEST\ServerPlugins&#xD;&#xA;COPY $(TargetDir)$(TargetName).pdb C:\Users\25034\Desktop\1.4.4.9\TEST\bin" />
 	</Target>
+
+	<Import Project="..\..\..\EnchCoreApi.Common.StructOffsetGenerator.Shared\EnchCoreApi.Common.StructOffsetGenerator.Shared.projitems" Label="Shared" />
 
 </Project>

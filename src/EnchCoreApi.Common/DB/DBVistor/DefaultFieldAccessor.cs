@@ -16,7 +16,7 @@ namespace EnchCoreApi.Common.DB.DBVistor
             return DateTime.Parse(str);
         }
 
-        string IDBFieldGetter<string>.Get(IDataReader r, int column) => r.IsDBNull(column) ? null : r.GetString(column);
+        string? IDBFieldGetter<string?>.Get(IDataReader r, int column) => r.IsDBNull(column) ? null : r.GetString(column);
 
         int IDBFieldGetter<int>.Get(IDataReader r, int column) => r.GetInt32(column);
 

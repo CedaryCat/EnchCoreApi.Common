@@ -6,7 +6,7 @@ namespace EnchCoreApi.Common.DB
     {
         public static Watch w = new Watch();
         private readonly Stopwatch sw = new Stopwatch();
-        private string Name;
+        private string? Name;
         public void Start(string name) {
             if (Name != null) {
                 sw.Stop();

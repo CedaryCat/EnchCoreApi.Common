@@ -6,8 +6,16 @@ namespace EnchCoreApi.Common.DB.DBVistor
 {
     public class QueryReader : IDisposable, ICloneable
     {
-        public IDbConnection? Connection { get; protected set; }
-        public IDataReader? Reader { get; protected set; }
+        protected IDbConnection? connection;
+        protected IDataReader? reader;
+        public IDbConnection Connection {
+            get => connection ?? throw new ObjectDisposedException(nameof(connection));
+            protected set => connection = value;
+        }
+        public IDataReader Reader {
+            get => reader ?? throw new ObjectDisposedException(nameof(reader));
+            protected set => reader = value;
+        }
         private QueryReaderBackup Backup { get; set; }
         public IDBFieldAccessor FieldAccessor { get; set; }
 
@@ -33,27 +41,18 @@ namespace EnchCoreApi.Common.DB.DBVistor
 
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
-                if (Reader != null) {
-                    Reader.Dispose();
-                    Reader = null;
-                }
-                if (Connection != null) {
-                    Connection.Dispose();
-                    Connection = null;
-                }
+                Reader.Dispose();
+                Connection.Dispose();
             }
         }
 
-        [MemberNotNullWhen(true, nameof(Reader))]
         public bool Read() {
             if (Reader == null)
                 return false;
             return Reader.Read();
         }
 
-        [MemberNotNull(nameof(Reader))]
         public T Get<T>(Column column) {
-            if (Reader == null) throw new ObjectDisposedException(nameof(Reader));
             return new DBValue<T>(column, FieldAccessor, Reader).GetTypedValue();
         }
     }

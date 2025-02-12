@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace EnchCoreApi.Common.DB.Core
 {
-    public class RowCollection<RowType> : IEnumerable<Row<RowType>>, IEnumerator<Row<RowType>> where RowType : new()
+    public class RowCollection<RowType> : IEnumerable<Row<RowType>>, IEnumerator<Row<RowType>> where RowType : notnull, new()
     {
         public Table Table { get; private set; }
         private QueryReader QueryReader;
