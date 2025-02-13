@@ -1,6 +1,5 @@
 ﻿using EnchCoreApi.Common.DB.Core;
 using EnchCoreApi.Common.DB.DBVistor;
-using EnchCoreApi.Common.Dynamic;
 using EnchCoreApi.Common.Utilities;
 using Microsoft.Data.Sqlite;
 using System.Data;
@@ -9,15 +8,11 @@ using System.Text;
 
 namespace EnchCoreApi.Common.DB.DBProvider
 {
-    public class SqliteAccessProvider : DBAccessProvider<SqliteConnection>
+    public class SqliteAccessProvider(SqliteConnection db) : DBAccessProvider<SqliteConnection>(db)
     {
-        public SqliteAccessProvider(SqliteConnection db) : base(db) {
-            DB = db;
-        }
-
         private readonly RandomHelper rand = new RandomHelper();
 
-        private new readonly SqliteConnection DB;
+        private new readonly SqliteConnection DB = db;
         public sealed override IDBFieldAccessor DBFieldAccessor { get; } = new DefaultFieldAccessor();
 
         public sealed override IDbConnection Clone() => new SqliteConnection(DB.ConnectionString);
@@ -31,7 +26,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
                 return com.ExecuteNonQuery();
             }
             catch (Exception ex) {
-                throw new Exception($"Fatal EnchCoreApi.Common initialization exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
+                throw new Exception($"Fatal EnchCoreApi.Common exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
             }
         }
         private int Query(string query, IEnumerable<object?> _params) {
@@ -47,7 +42,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
                 return com.ExecuteNonQuery();
             }
             catch (Exception ex) {
-                throw new Exception($"Fatal EnchCoreApi.Common initialization exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
+                throw new Exception($"Fatal EnchCoreApi.Common exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
             }
         }
 
@@ -72,7 +67,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
                     return new QueryReader(db, com.ExecuteReader(), this, FieldAccessor);
                 }
                 catch (Exception ex) {
-                    throw new Exception($"Fatal EnchCoreApi.Common initialization exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
+                    throw new Exception($"Fatal EnchCoreApi.Common exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
                 }
             }
         }
@@ -86,7 +81,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
                 return new QueryReader(db, com.ExecuteReader(), new SqliteReaderBackup(DB, query, DBFieldAccessor), DBFieldAccessor);
             }
             catch (Exception ex) {
-                throw new Exception($"Fatal EnchCoreApi.Common initialization exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
+                throw new Exception($"Fatal EnchCoreApi.Common exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
             }
         }
 
@@ -103,7 +98,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
                 return new QueryReader(db, com.ExecuteReader(), new SqliteReaderBackup(DB, query, DBFieldAccessor), DBFieldAccessor);
             }
             catch (Exception ex) {
-                throw new Exception($"Fatal EnchCoreApi.Common initialization exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
+                throw new Exception($"Fatal EnchCoreApi.Common exception: failed to connect to database in execute\n{query}\n. See inner exception for details.", ex);
             }
         }
 
@@ -237,7 +232,7 @@ namespace EnchCoreApi.Common.DB.DBProvider
             return Query($"UPDATE {where.Table.Name} SET {updateStatementString} {where.GetStatement(ref parameters)}", parameters);
         }
 
-        public sealed override WhereTermiNode<RowType> NewInitialWhere<RowType>(Table table) {
+        public sealed override WhereTermiNode<RowType> CreateWhereRoot<RowType>(Table table) {
             return new WhereTermiNode<RowType>(table, this);
         }
 

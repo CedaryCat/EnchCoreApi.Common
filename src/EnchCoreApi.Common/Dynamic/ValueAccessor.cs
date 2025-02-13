@@ -38,7 +38,7 @@ namespace EnchCoreApi.Common.Dynamic
             var valueParam = Expression.Parameter(tobj);
             var declaringType = prop.DeclaringType ?? throw new Exception("DeclaringType is null");
             var obj = declaringType.IsValueType ? Expression.Unbox(InstanceParam, declaringType) : Expression.TypeAs(InstanceParam, declaringType);
-            var value = declaringType.IsValueType ? Expression.Unbox(valueParam, prop.PropertyType) : Expression.TypeAs(valueParam, prop.PropertyType);
+            var value = prop.PropertyType.IsValueType ? Expression.Unbox(valueParam, prop.PropertyType) : Expression.TypeAs(valueParam, prop.PropertyType);
 
             return new ValueAccessor(
                 prop.Name,

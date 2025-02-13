@@ -68,43 +68,43 @@ namespace EnchCoreApi.Common.DB
 
         #region Where
         public WhereTermiNode<RowType> Where() {
-            return Provider.NewInitialWhere<RowType>(Table);
+            return Provider.CreateWhereRoot<RowType>(Table);
         }
         public WhereTermiNode<RowType> Where<T1>(string column1, T1 value1) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1);
         }
         public WhereTermiNode<RowType> Where<T1, T2>(string column1, T1 value1, string column2, T2 value2) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2);
         }
         public WhereTermiNode<RowType> Where<T1, T2, T3>(string column1, T1 value1, string column2, T2 value2, string column3, T3 value3) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3);
         }
         public WhereTermiNode<RowType> Where<T1, T2, T3, T4>(string column1, T1 value1, string column2, T2 value2, string column3, T3 value3, string column4, T4 value4) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4);
         }
         public WhereTermiNode<RowType> Where<T1, T2, T3, T4, T5>(string column1, T1 value1, string column2, T2 value2, string column3, T3 value3, string column4, T4 value4, string column5, T5 value5) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5);
         }
         public WhereTermiNode<RowType> Where<T1, T2, T3, T4, T5, T6>(string column1, T1 value1, string column2, T2 value2, string column3, T3 value3, string column4, T4 value4, string column5, T5 value5, string column6, T6 value6) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6);
         }
         public WhereTermiNode<RowType> Where<T1, T2, T3, T4, T5, T6, T7>(string column1, T1 value1, string column2, T2 value2, string column3, T3 value3, string column4, T4 value4, string column5, T5 value5, string column6, T6 value6, string column7, T7 value7) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6, column7, value7);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6, column7, value7);
         }
         public WhereTermiNode<RowType> Where<T1, T2, T3, T4, T5, T6, T7, T8>(string column1, T1 value1, string column2, T2 value2, string column3, T3 value3, string column4, T4 value4, string column5, T5 value5, string column6, T6 value6, string column7, T7 value7, string column8, T8 value8) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6, column7, value7, column8, value8);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6, column7, value7, column8, value8);
         }
         public WhereTermiNode<RowType> Where<T1, T2, T3, T4, T5, T6, T7, T8, T9>(string column1, T1 value1, string column2, T2 value2, string column3, T3 value3, string column4, T4 value4, string column5, T5 value5, string column6, T6 value6, string column7, T7 value7, string column8, T8 value8, string column9, T9 value9) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6, column7, value7, column8, value8, column9, value9);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6, column7, value7, column8, value8, column9, value9);
         }
         public WhereTermiNode<RowType> Where<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(string column1, T1 value1, string column2, T2 value2, string column3, T3 value3, string column4, T4 value4, string column5, T5 value5, string column6, T6 value6, string column7, T7 value7, string column8, T8 value8, string column9, T9 value9, string column10, T10 value10) {
-            return Provider.NewInitialWhere<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6, column7, value7, column8, value8, column9, value9, column10, value10);
+            return Provider.CreateWhereRoot<RowType>(Table).AndWhere(column1, value1, column2, value2, column3, value3, column4, value4, column5, value5, column6, value6, column7, value7, column8, value8, column9, value9, column10, value10);
         }
         #endregion
 
         #region Min,Max,Avg,Sum
         public T SelectMax<T>(string column) {
-            return SelectMax<T>(column, Provider.NewInitialWhere<RowType>(Table));
+            return SelectMax<T>(column, Provider.CreateWhereRoot<RowType>(Table));
         }
         public T SelectMax<T>(string column, IWhere<RowType> where) {
             var c = Table[column];
@@ -117,7 +117,7 @@ namespace EnchCoreApi.Common.DB
 
 
         public T SelectMin<T>(string column) {
-            return SelectMin<T>(column, Provider.NewInitialWhere<RowType>(Table));
+            return SelectMin<T>(column, Provider.CreateWhereRoot<RowType>(Table));
         }
         public T SelectMin<T>(string column, IWhere<RowType> where) {
             var c = Table[column];
@@ -130,7 +130,7 @@ namespace EnchCoreApi.Common.DB
 
 
         public double SelectAvg(string column) {
-            return SelectAvg(column, Provider.NewInitialWhere<RowType>(Table));
+            return SelectAvg(column, Provider.CreateWhereRoot<RowType>(Table));
         }
         public double SelectAvg(string column, IWhere<RowType> where) {
             var c = Table[column];
@@ -143,7 +143,7 @@ namespace EnchCoreApi.Common.DB
 
 
         public T SelectSum<T>(string column) {
-            return SelectSum<T>(column, Provider.NewInitialWhere<RowType>(Table));
+            return SelectSum<T>(column, Provider.CreateWhereRoot<RowType>(Table));
         }
         public T SelectSum<T>(string column, IWhere<RowType> where) {
             var c = Table[column];
