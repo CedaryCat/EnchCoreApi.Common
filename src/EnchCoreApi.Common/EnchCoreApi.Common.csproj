@@ -59,9 +59,20 @@
 	<ItemGroup>
 	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
-	  <Folder Include="Linq\" />
+		<None Remove="RuntimeIdentifierGraph.json" />
+		<None Remove="Native\libs\**\*" />
+		<EmbeddedResource Include="Native\libs\**\*">
+			<LogicalName>%(RelativeDir)%(Filename)%(Extension)</LogicalName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Native\RuntimeIdentifierGraph.json" >
+			<LogicalName>%(RelativeDir)%(Filename)%(Extension)</LogicalName>
+		</EmbeddedResource>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="IO\LibDeflate\" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(Platform)'=='ForTerrariaPlugin_Debug|AnyCPU'">
